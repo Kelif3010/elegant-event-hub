@@ -1,13 +1,17 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heart, LayoutDashboard, Users, Mail, CalendarDays, Hotel, Settings, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { Heart, LayoutDashboard, Users, Mail, CalendarDays, Hotel, Settings, ChevronLeft, ChevronRight, LogOut, Wallet, Grid3X3, ListTodo, Clock, Store } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
   { label: "Gäste", to: "/guests", icon: Users },
+  { label: "Tischplan", to: "/table-plan", icon: Grid3X3 },
+  { label: "Aufgaben", to: "/tasks", icon: ListTodo },
+  { label: "Zeitplan", to: "/timeline", icon: Clock },
+  { label: "Budget", to: "/budget", icon: Wallet },
+  { label: "Dienstleister", to: "/vendors", icon: Store },
   { label: "RSVP", to: "/rsvp", icon: Mail },
   { label: "Event-Infos", to: "/event", icon: CalendarDays },
   { label: "Hotels & Anreise", to: "/hotels", icon: Hotel },
@@ -29,7 +33,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           <Heart className="h-5 w-5 text-champagne shrink-0" />
           {!collapsed && <span className="font-serif font-semibold truncate">Eventora</span>}
         </div>
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             const active = location.pathname === item.to;
             return (

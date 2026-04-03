@@ -10,6 +10,11 @@ import RSVP from "./pages/RSVP";
 import EventPage from "./pages/EventPage";
 import Hotels from "./pages/Hotels";
 import Settings from "./pages/Settings";
+import Budget from "./pages/Budget";
+import TablePlan from "./pages/TablePlan";
+import Tasks from "./pages/Tasks";
+import Timeline from "./pages/Timeline";
+import Vendors from "./pages/Vendors";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +33,11 @@ const App = () => (
           <Route path="/event" element={<EventPage />} />
           <Route path="/hotels" element={<Hotels />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/budget" element={<Budget />} />
+          <Route path="/table-plan" element={<TablePlan />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/timeline" element={<Timeline />} />
+          <Route path="/vendors" element={<Vendors />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
