@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { weddingInfo } from "@/data/mockData";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ import Footer from "@/components/landing/Footer";
 const steps = ["Zusage", "Essen", "Logistik", "Extras"];
 
 const RSVP = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
@@ -206,7 +208,7 @@ const RSVP = () => {
                   Weiter <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               ) : (
-                <Button onClick={() => setSubmitted(true)} className="bg-champagne hover:bg-champagne/90 text-accent-foreground">
+                <Button onClick={() => { setSubmitted(true); setTimeout(() => navigate("/guest-portal"), 2000); }} className="bg-champagne hover:bg-champagne/90 text-accent-foreground">
                   <Sparkles className="h-4 w-4 mr-2" /> Absenden
                 </Button>
               )}

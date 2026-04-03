@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Guests from "./pages/Guests";
 import RSVP from "./pages/RSVP";
+import GuestLogin from "./pages/GuestLogin";
+import GuestPortal from "./pages/GuestPortal";
 import EventPage from "./pages/EventPage";
 import Hotels from "./pages/Hotels";
 import Settings from "./pages/Settings";
@@ -15,6 +17,11 @@ import TablePlan from "./pages/TablePlan";
 import Tasks from "./pages/Tasks";
 import Timeline from "./pages/Timeline";
 import Vendors from "./pages/Vendors";
+import Invitations from "./pages/Invitations";
+import PhotoGallery from "./pages/PhotoGallery";
+import MusicPlaylist from "./pages/MusicPlaylist";
+import Wishlist from "./pages/Wishlist";
+import Guestbook from "./pages/Guestbook";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,7 +36,9 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/guests" element={<Guests />} />
+          <Route path="/guest-login" element={<GuestLogin />} />
           <Route path="/rsvp" element={<RSVP />} />
+          <Route path="/guest-portal" element={<GuestPortal />} />
           <Route path="/event" element={<EventPage />} />
           <Route path="/hotels" element={<Hotels />} />
           <Route path="/settings" element={<Settings />} />
@@ -38,6 +47,11 @@ const App = () => (
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/timeline" element={<Timeline />} />
           <Route path="/vendors" element={<Vendors />} />
+          <Route path="/invitations" element={<Invitations />} />
+          <Route path="/photos" element={<PhotoGallery />} />
+          <Route path="/music" element={<MusicPlaylist />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/guestbook" element={<Guestbook />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
