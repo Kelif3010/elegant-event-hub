@@ -15,6 +15,7 @@ import Footer from "@/components/landing/Footer";
 const steps = ["Zusage", "Essen", "Logistik", "Extras"];
 
 const RSVP = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
