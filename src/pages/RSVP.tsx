@@ -208,7 +208,7 @@ const RSVP = () => {
                   Weiter <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               ) : (
-                <Button onClick={() => setSubmitted(true)} className="bg-champagne hover:bg-champagne/90 text-accent-foreground">
+                <Button onClick={() => { setSubmitted(true); setTimeout(() => navigate("/guest-portal"), 2000); }} className="bg-champagne hover:bg-champagne/90 text-accent-foreground">
                   <Sparkles className="h-4 w-4 mr-2" /> Absenden
                 </Button>
               )}
