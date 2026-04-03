@@ -17,14 +17,14 @@ export const timelineEvents = [
 ];
 
 export const guests = [
-  { id: "1", firstName: "Maria", lastName: "Müller", email: "maria@email.de", status: "confirmed", meal: "Vegetarisch", allergies: "Laktose", plusOne: true, plusOneName: "Thomas Müller", children: 0, accommodation: true, transport: "Eigene Anreise", notes: "Kommt aus München", table: "Tisch 1", group: "Familie Braut" },
-  { id: "2", firstName: "Jan", lastName: "Schmidt", email: "jan@email.de", status: "confirmed", meal: "Fleisch", allergies: "", plusOne: false, plusOneName: "", children: 0, accommodation: false, transport: "Shuttle", notes: "", table: "Tisch 2", group: "Freunde Bräutigam" },
-  { id: "3", firstName: "Lisa", lastName: "Weber", email: "lisa@email.de", status: "pending", meal: "", allergies: "", plusOne: true, plusOneName: "", children: 1, accommodation: true, transport: "", notes: "Hat ein Kleinkind (2 Jahre)", table: "Tisch 3", group: "Freunde Braut" },
-  { id: "4", firstName: "Michael", lastName: "Koch", email: "michael@email.de", status: "declined", meal: "", allergies: "", plusOne: false, plusOneName: "", children: 0, accommodation: false, transport: "", notes: "Ist leider im Urlaub", table: "", group: "Kollegen" },
-  { id: "5", firstName: "Anna", lastName: "Fischer", email: "anna@email.de", status: "confirmed", meal: "Vegan", allergies: "Gluten, Nüsse", plusOne: true, plusOneName: "David Fischer", children: 0, accommodation: true, transport: "Eigene Anreise", notes: "", table: "Tisch 1", group: "Familie Braut" },
-  { id: "6", firstName: "Paul", lastName: "Bauer", email: "paul@email.de", status: "confirmed", meal: "Fleisch", allergies: "", plusOne: false, plusOneName: "", children: 0, accommodation: false, transport: "Shuttle", notes: "Trauzeuge", table: "Tisch Brautpaar", group: "Trauzeugen" },
-  { id: "7", firstName: "Elena", lastName: "Wagner", email: "elena@email.de", status: "pending", meal: "", allergies: "", plusOne: true, plusOneName: "", children: 2, accommodation: true, transport: "", notes: "", table: "Tisch 4", group: "Familie Bräutigam" },
-  { id: "8", firstName: "Tobias", lastName: "Richter", email: "tobias@email.de", status: "confirmed", meal: "Fisch", allergies: "Schalentiere", plusOne: true, plusOneName: "Sandra Richter", children: 0, accommodation: false, transport: "Eigene Anreise", notes: "", table: "Tisch 2", group: "Freunde Bräutigam" },
+  { id: "1", firstName: "Maria", lastName: "Müller", email: "maria@email.de", status: "confirmed", meal: "Vegetarisch", allergies: "Laktose", plusOne: true, plusOneName: "Thomas Müller", children: 0, accommodation: true, transport: "Eigene Anreise", notes: "Kommt aus München", table: "Tisch 1", group: "Familie Braut", accessCode: "MARIA2025" },
+  { id: "2", firstName: "Jan", lastName: "Schmidt", email: "jan@email.de", status: "confirmed", meal: "Fleisch", allergies: "", plusOne: false, plusOneName: "", children: 0, accommodation: false, transport: "Shuttle", notes: "", table: "Tisch 2", group: "Freunde Bräutigam", accessCode: "JAN2025" },
+  { id: "3", firstName: "Lisa", lastName: "Weber", email: "lisa@email.de", status: "pending", meal: "", allergies: "", plusOne: true, plusOneName: "", children: 1, accommodation: true, transport: "", notes: "Hat ein Kleinkind (2 Jahre)", table: "Tisch 3", group: "Freunde Braut", accessCode: "LISA2025" },
+  { id: "4", firstName: "Michael", lastName: "Koch", email: "michael@email.de", status: "declined", meal: "", allergies: "", plusOne: false, plusOneName: "", children: 0, accommodation: false, transport: "", notes: "Ist leider im Urlaub", table: "", group: "Kollegen", accessCode: "MICHAEL2025" },
+  { id: "5", firstName: "Anna", lastName: "Fischer", email: "anna@email.de", status: "confirmed", meal: "Vegan", allergies: "Gluten, Nüsse", plusOne: true, plusOneName: "David Fischer", children: 0, accommodation: true, transport: "Eigene Anreise", notes: "", table: "Tisch 1", group: "Familie Braut", accessCode: "ANNA2025" },
+  { id: "6", firstName: "Paul", lastName: "Bauer", email: "paul@email.de", status: "confirmed", meal: "Fleisch", allergies: "", plusOne: false, plusOneName: "", children: 0, accommodation: false, transport: "Shuttle", notes: "Trauzeuge", table: "Tisch Brautpaar", group: "Trauzeugen", accessCode: "PAUL2025" },
+  { id: "7", firstName: "Elena", lastName: "Wagner", email: "elena@email.de", status: "pending", meal: "", allergies: "", plusOne: true, plusOneName: "", children: 2, accommodation: true, transport: "", notes: "", table: "Tisch 4", group: "Familie Bräutigam", accessCode: "ELENA2025" },
+  { id: "8", firstName: "Tobias", lastName: "Richter", email: "tobias@email.de", status: "confirmed", meal: "Fisch", allergies: "Schalentiere", plusOne: true, plusOneName: "Sandra Richter", children: 0, accommodation: false, transport: "Eigene Anreise", notes: "", table: "Tisch 2", group: "Freunde Bräutigam", accessCode: "TOBIAS2025" },
 ];
 
 export const hotels = [
@@ -70,6 +70,8 @@ export const recentActivity = [
   { text: "Paul Bauer hat Songwunsch eingereicht", time: "gestern", type: "song" },
   { text: "3 neue RSVP-Antworten", time: "gestern", type: "rsvp" },
   { text: "Hotel Schlossblick Kontingent bestätigt", time: "vor 2 Tagen", type: "hotel" },
+  { text: "Lisa Weber hat ein Foto hochgeladen", time: "vor 3 Tagen", type: "photo" },
+  { text: "Jan Schmidt hat einen Song vorgeschlagen", time: "vor 3 Tagen", type: "song" },
 ];
 
 export const pricingPlans = [
@@ -87,7 +89,7 @@ export const pricingPlans = [
     price: "29",
     period: "/ Monat",
     description: "Alles, was ihr für eure Traumhochzeit braucht.",
-    features: ["Unbegrenzte Gäste", "Eigene Domain", "Individuelle Gästeseite", "Gästemanagement Pro", "Hotel- & Transportplanung", "Tischplanung", "Budget-Tracker", "Priority Support"],
+    features: ["Unbegrenzte Gäste", "Eigene Domain", "Individuelle Gästeseite", "Gästemanagement Pro", "Hotel- & Transportplanung", "Tischplanung", "Budget-Tracker", "Gästebuch & Fotogalerie", "Wunschliste", "Musik-Integration", "Priority Support"],
     cta: "Premium wählen",
     highlighted: true,
   },
@@ -162,4 +164,66 @@ export const vendors = [
   { id: "6", name: "The Wedding Notes", category: "Musik", contact: "Sarah Keys", email: "band@weddingnotes.de", phone: "+49 172 5559876", status: "confirmed", amount: 1000, rating: 5, notes: "Live-Band für Dinner, 2h Set" },
   { id: "7", name: "Reisebus Meyer", category: "Transport", contact: "Herr Meyer", email: "info@reisebus-meyer.de", phone: "+49 9861 56789", status: "confirmed", amount: 1200, rating: 4, notes: "Shuttle 2x hin und zurück" },
   { id: "8", name: "Druckerei Fein", category: "Papeterie", contact: "Frau Fein", email: "info@druckereifein.de", phone: "+49 9861 67890", status: "confirmed", amount: 950, rating: 5, notes: "Einladungen, Menü- und Tischkarten" },
+];
+
+// Wishlist / Gift Registry
+export const wishlistItems = [
+  { id: "1", title: "KitchenAid Küchenmaschine", description: "Artisan 4.8L in Cream", price: 599, image: "🍳", category: "Küche", reservedBy: "Maria Müller", link: "#" },
+  { id: "2", title: "Dyson V15 Staubsauger", description: "Kabelloser Staubsauger", price: 699, image: "🧹", category: "Haushalt", reservedBy: null, link: "#" },
+  { id: "3", title: "Flitterwochen-Beitrag", description: "Für unsere Reise nach Bali 🌴", price: null, image: "✈️", category: "Erlebnis", reservedBy: null, link: "#" },
+  { id: "4", title: "Espressomaschine", description: "Sage Barista Express", price: 549, image: "☕", category: "Küche", reservedBy: "Jan Schmidt", link: "#" },
+  { id: "5", title: "Bettwäsche-Set", description: "Premium Leinen, Weiß & Sage", price: 289, image: "🛏️", category: "Schlafzimmer", reservedBy: null, link: "#" },
+  { id: "6", title: "Weber Gasgrill", description: "Spirit EPX-335 GBS", price: 899, image: "🔥", category: "Garten", reservedBy: null, link: "#" },
+  { id: "7", title: "Weinpaket Toskana", description: "12 Flaschen ausgewählte Weine", price: 199, image: "🍷", category: "Genuss", reservedBy: "Anna Fischer", link: "#" },
+  { id: "8", title: "Fotoalbum-Gutschein", description: "Professionelles Hochzeitsalbum", price: 350, image: "📸", category: "Erinnerungen", reservedBy: null, link: "#" },
+  { id: "9", title: "Kochkurs für Zwei", description: "Italienische Küche – 3 Abende", price: 180, image: "👨‍🍳", category: "Erlebnis", reservedBy: null, link: "#" },
+  { id: "10", title: "Handtuch-Set", description: "Ägyptische Baumwolle, 10-tlg.", price: 159, image: "🛁", category: "Bad", reservedBy: "Paul Bauer", link: "#" },
+];
+
+// Photo gallery
+export const galleryPhotos = [
+  { id: "1", url: "/placeholder.svg", caption: "Save the Date Shooting", uploadedBy: "Studio Lichtblick", date: "2025-03-20", likes: 24, category: "pre-wedding" },
+  { id: "2", url: "/placeholder.svg", caption: "Verlobung im Park", uploadedBy: "Maria Müller", date: "2025-01-15", likes: 18, category: "pre-wedding" },
+  { id: "3", url: "/placeholder.svg", caption: "Location-Besichtigung", uploadedBy: "Sophie", date: "2025-02-01", likes: 12, category: "pre-wedding" },
+  { id: "4", url: "/placeholder.svg", caption: "Einladungs-Design", uploadedBy: "Sophie", date: "2025-03-01", likes: 8, category: "preparation" },
+  { id: "5", url: "/placeholder.svg", caption: "Blumenprobe", uploadedBy: "Sophie", date: "2025-04-10", likes: 15, category: "preparation" },
+  { id: "6", url: "/placeholder.svg", caption: "Tortenpobe", uploadedBy: "Alexander", date: "2025-05-01", likes: 22, category: "preparation" },
+];
+
+// Playlist / Music
+export const playlistSongs = [
+  { id: "1", title: "Perfect", artist: "Ed Sheeran", addedBy: "Sophie & Alexander", votes: 42, category: "first-dance" },
+  { id: "2", title: "Thinking Out Loud", artist: "Ed Sheeran", addedBy: "Maria Müller", votes: 38, category: "romantic" },
+  { id: "3", title: "Uptown Funk", artist: "Bruno Mars", addedBy: "Paul Bauer", votes: 35, category: "party" },
+  { id: "4", title: "Shut Up and Dance", artist: "WALK THE MOON", addedBy: "Jan Schmidt", votes: 28, category: "party" },
+  { id: "5", title: "Can't Stop the Feeling!", artist: "Justin Timberlake", addedBy: "Anna Fischer", votes: 25, category: "party" },
+  { id: "6", title: "A Thousand Years", artist: "Christina Perri", addedBy: "Elena Wagner", votes: 22, category: "romantic" },
+  { id: "7", title: "Dancing Queen", artist: "ABBA", addedBy: "Tobias Richter", votes: 30, category: "party" },
+  { id: "8", title: "All of Me", artist: "John Legend", addedBy: "Sophie & Alexander", votes: 40, category: "romantic" },
+  { id: "9", title: "September", artist: "Earth, Wind & Fire", addedBy: "Paul Bauer", votes: 33, category: "party" },
+  { id: "10", title: "I Gotta Feeling", artist: "Black Eyed Peas", addedBy: "Jan Schmidt", votes: 27, category: "party" },
+];
+
+// Guestbook
+export const guestbookEntries = [
+  { id: "1", name: "Maria & Thomas Müller", message: "Wir freuen uns so sehr auf euren großen Tag! Ihr seid das schönste Paar und habt all das Glück der Welt verdient. 💕", date: "2025-04-15", emoji: "💕" },
+  { id: "2", name: "Paul Bauer", message: "Bester Freund, bester Bräutigam! Ich bin so stolz, euer Trauzeuge sein zu dürfen. Auf euch beiden! 🥂", date: "2025-04-12", emoji: "🥂" },
+  { id: "3", name: "Anna & David Fischer", message: "Liebe Sophie, lieber Alex – wir wünschen euch von ganzem Herzen alles Gute. Genießt jeden Moment! 🌟", date: "2025-04-10", emoji: "🌟" },
+  { id: "4", name: "Jan Schmidt", message: "Ich hab schon die Tanzschuhe poliert! Freue mich riesig auf eine unvergessliche Party mit euch. 🕺", date: "2025-04-08", emoji: "🕺" },
+];
+
+// Menu for guest portal
+export const menuCourses = [
+  { course: "Amuse-Bouche", title: "Trüffel-Crème-Brûlée", description: "Mit Parmesan-Chip und Microgreens", icon: "🍽️" },
+  { course: "Vorspeise", title: "Carpaccio vom Rind", description: "Mit Rucola, Pinienkerne und Parmesanspäne. Vegetarisch: Burrata mit ofengetrockneten Tomaten", icon: "🥗" },
+  { course: "Zwischengang", title: "Waldpilz-Velouté", description: "Mit Trüffelöl und knusprigem Ciabatta", icon: "🍵" },
+  { course: "Hauptgang", title: "Filet vom Weiderind", description: "Rosa gebraten mit Rotweinjus, Süßkartoffelpüree und glasiertem Gemüse. Alternativ: Lachs oder veganes Risotto", icon: "🥩" },
+  { course: "Dessert", title: "Trio vom Schokoladentraum", description: "Mousse au Chocolat, Lava Cake und Praline mit Himbeersorbet", icon: "🍫" },
+];
+
+// Invitation templates
+export const invitationTemplates = [
+  { id: "1", name: "Elegant Classic", preview: "Klassisch elegant mit goldenen Akzenten", style: "classic" },
+  { id: "2", name: "Modern Minimal", preview: "Minimalistisch und modern", style: "modern" },
+  { id: "3", name: "Garden Romance", preview: "Romantisch mit floralen Elementen", style: "garden" },
 ];
