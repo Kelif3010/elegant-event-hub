@@ -22,7 +22,7 @@ const navSections = [
     items: [
       { label: "Einladungen", to: "/invitations", icon: Send },
       { label: "RSVP", to: "/rsvp", icon: Mail },
-      { label: "Gästeportal", to: "/guest-portal", icon: CalendarDays },
+      { label: "Gästeportal", to: "/guest-portal-manager", icon: CalendarDays },
     ],
   },
   {
