@@ -9,6 +9,7 @@ import Guests from "./pages/Guests";
 import RSVP from "./pages/RSVP";
 import GuestLogin from "./pages/GuestLogin";
 import GuestPortal from "./pages/GuestPortal";
+import GuestPortalManager from "./pages/GuestPortalManager";
 import EventPage from "./pages/EventPage";
 import Hotels from "./pages/Hotels";
 import Settings from "./pages/Settings";
@@ -22,6 +23,7 @@ import PhotoGallery from "./pages/PhotoGallery";
 import MusicPlaylist from "./pages/MusicPlaylist";
 import Wishlist from "./pages/Wishlist";
 import Guestbook from "./pages/Guestbook";
+import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,11 +36,13 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/guests" element={<Guests />} />
           <Route path="/guest-login" element={<GuestLogin />} />
           <Route path="/rsvp" element={<RSVP />} />
           <Route path="/guest-portal" element={<GuestPortal />} />
+          <Route path="/guest-portal-manager" element={<GuestPortalManager />} />
           <Route path="/event" element={<EventPage />} />
           <Route path="/hotels" element={<Hotels />} />
           <Route path="/settings" element={<Settings />} />
