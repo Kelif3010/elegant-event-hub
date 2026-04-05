@@ -34,6 +34,9 @@ const Header = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          <button onClick={() => updateTheme({ darkMode: !theme.darkMode })} className="p-2 rounded-lg hover:bg-secondary transition-colors">
+            {theme.darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <Button variant="ghost" size="sm" asChild><Link to="/dashboard">Login</Link></Button>
           <Button size="sm" asChild className="shadow-elegant"><Link to="/dashboard">Jetzt starten</Link></Button>
         </div>
