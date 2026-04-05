@@ -16,6 +16,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const isLanding = location.pathname === "/";
+  const { theme, updateTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-50 glass-subtle">
