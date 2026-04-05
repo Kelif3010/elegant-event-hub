@@ -1,8 +1,9 @@
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const navItems = [
   { label: "Features", href: "/#features" },
@@ -15,6 +16,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const isLanding = location.pathname === "/";
+  const { theme, updateTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-50 glass-subtle">
@@ -32,6 +34,9 @@ const Header = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          <button onClick={() => updateTheme({ darkMode: !theme.darkMode })} className="p-2 rounded-lg hover:bg-secondary transition-colors">
+            {theme.darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <Button variant="ghost" size="sm" asChild><Link to="/dashboard">Login</Link></Button>
           <Button size="sm" asChild className="shadow-elegant"><Link to="/dashboard">Jetzt starten</Link></Button>
         </div>
