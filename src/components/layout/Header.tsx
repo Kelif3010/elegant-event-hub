@@ -1,8 +1,9 @@
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, X, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const navItems = [
   { label: "Features", href: "/#features" },
