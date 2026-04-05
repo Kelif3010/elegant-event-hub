@@ -159,9 +159,9 @@ const SettingsPage = () => {
                 <div className="flex items-center gap-4">
                   <span className="text-xs text-muted-foreground">S</span>
                   <Slider
-                    value={[theme.fontSize === "sm" ? 0 : theme.fontSize === "lg" ? 2 : 1]}
+                    value={[theme.fontSize === "S" ? 0 : theme.fontSize === "L" ? 2 : 1]}
                     min={0} max={2} step={1}
-                    onValueChange={v => updateTheme({ fontSize: (["sm", "md", "lg"] as const)[v[0]] })}
+                    onValueChange={v => updateTheme({ fontSize: (["S", "M", "L"] as const)[v[0]] })}
                     className="flex-1"
                   />
                   <span className="text-xs text-muted-foreground">L</span>
