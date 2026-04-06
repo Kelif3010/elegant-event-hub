@@ -407,7 +407,7 @@ const FoodAllergies = () => {
 
             {filteredGuests.length === 0 ? (
               <EmptyState
-                icon={<Users className="h-16 w-16" />}
+                illustration={<Users className="h-16 w-16" />}
                 title="Keine Gäste gefunden"
                 description="Passe deine Filter an oder füge Gäste hinzu."
               />

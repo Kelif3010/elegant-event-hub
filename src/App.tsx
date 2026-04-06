@@ -69,6 +69,7 @@ const App = () => (
             <Route path="/checkin" element={<CheckIn />} />
             <Route path="/honeymoon" element={<Honeymoon />} />
             <Route path="/address-collector" element={<AddressCollector />} />
+            <Route path="/food" element={<FoodAllergies />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -17,6 +17,7 @@ const navSections = [
       { label: "Zeitplan", to: "/timeline", icon: Clock },
       { label: "Budget", to: "/budget", icon: Wallet },
       { label: "Dienstleister", to: "/vendors", icon: Store },
+      { label: "Essen & Allergien", to: "/food", icon: UtensilsCrossed },
     ],
   },
   {
