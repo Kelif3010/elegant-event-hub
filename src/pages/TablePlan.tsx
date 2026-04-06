@@ -150,7 +150,7 @@ const TablePlan = () => {
               <EmptyState illustration={<TablePlanIllustration />} title="Noch keine Tische erstellt" description="Erstellt euren ersten Tisch und beginnt mit der Sitzordnung." actionLabel="Ersten Tisch erstellen" onAction={() => setShowAddTable(true)} />
             ) : view === "list" ? (
               <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {tables.map(table => {
                     const tableGuests = table.guests.map(id => getGuest(id)).filter(Boolean);
                     return (
