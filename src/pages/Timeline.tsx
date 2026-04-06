@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Plus, Clock, MapPin, Edit, Sparkles, Heart, GlassWater, Utensils, Music, Pizza, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import EmptyState, { TimelineIllustration } from "@/components/EmptyState";
 
 const iconMap: Record<string, typeof Sparkles> = { sparkles: Sparkles, heart: Heart, "glass-water": GlassWater, utensils: Utensils, music: Music, pizza: Pizza };
 
