@@ -115,7 +115,13 @@ const Wishlist = () => {
           ))}
         </div>
 
-        {/* Items */}
+        {filtered.length === 0 ? (
+          search || categoryFilter !== "all" ? (
+            <EmptyState illustration={<WishlistIllustration />} title="Keine Wünsche gefunden" description="Versuche einen anderen Filter oder Suchbegriff." />
+          ) : (
+            <EmptyState illustration={<WishlistIllustration />} title="Noch keine Wünsche" description="Erstellt eure Wunschliste – Gäste können Geschenke über das Portal reservieren." actionLabel="Ersten Wunsch hinzufügen" onAction={() => setShowAddItem(true)} />
+          )
+        ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {filtered.map(item => (
             <div key={item.id} className={cn("p-5 rounded-2xl border shadow-elegant transition-all hover:shadow-elevated", item.reservedBy ? "bg-muted border-border/30" : "bg-card border-border/50")}>
