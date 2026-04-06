@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, Star, Phone, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import EmptyState, { VendorsIllustration } from "@/components/EmptyState";
 
 const Vendors = () => {
   const [vendorList, setVendorList] = useState(initialVendors);
