@@ -153,6 +153,7 @@ const Wishlist = () => {
           ))}
         </div>
         )}
+      </div>
 
       {/* Add Item Dialog */}
       <Dialog open={showAddItem} onOpenChange={setShowAddItem}>
