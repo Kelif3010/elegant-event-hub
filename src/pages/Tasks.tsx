@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Plus, CheckCircle2, Circle, Clock, ListTodo } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import EmptyState, { TasksIllustration } from "@/components/EmptyState";
 
 type TaskStatus = "all" | "open" | "in-progress" | "done";
 
