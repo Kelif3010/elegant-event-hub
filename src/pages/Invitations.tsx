@@ -97,10 +97,10 @@ const Invitations = () => {
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 overflow-x-auto pb-1 -mx-1 px-1">
           {(["all", "not_sent", "sent", "opened", "reminded", "rsvp_done"] as const).map(f => (
             <button key={f} onClick={() => setFilter(f)} className={cn(
-              "px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5",
+              "px-3 py-2 md:py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 whitespace-nowrap min-h-[40px] md:min-h-0",
               filter === f ? "bg-accent text-accent-foreground" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
             )}>
               {f === "all" ? "Alle" : statusConfig[f].label}
