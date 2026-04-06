@@ -39,7 +39,7 @@ const MusicPlaylist = () => {
         </div>
 
         {/* Streaming Links */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-5 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-3">
             <div className="flex items-center gap-2">
               <span className="text-xl">🎧</span>

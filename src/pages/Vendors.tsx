@@ -69,7 +69,7 @@ const Vendors = () => {
             <EmptyState illustration={<VendorsIllustration />} title="Noch keine Dienstleister" description="Fügt eure Dienstleister hinzu – von Catering bis Fotografie." actionLabel="Dienstleister hinzufügen" onAction={() => setShowAddDialog(true)} />
           )
         ) : (
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filtered.map(v => (
             <button key={v.id} onClick={() => setSelected(v)} className="w-full text-left p-5 rounded-2xl bg-card border border-border/50 shadow-elegant hover:shadow-elevated transition-all space-y-3">
               <div className="flex items-start justify-between">

@@ -24,7 +24,7 @@ const Guestbook = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {[
             { label: "Einträge", value: entries.length, icon: "📝" },
             { label: "Dieser Monat", value: entries.filter(e => e.date >= "2025-04-01").length, icon: "📅" },
