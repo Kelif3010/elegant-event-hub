@@ -95,29 +95,29 @@ const TablePlan = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="space-y-6 md:space-y-8">
+        <div className="flex flex-col gap-4">
           <div>
             <p className="text-sm text-muted-foreground">Sitzordnung planen</p>
-            <h1 className="text-3xl md:text-4xl font-serif font-semibold">Tischplan</h1>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-semibold">Tischplan</h1>
           </div>
-          <div className="flex gap-3 items-center">
-            <Badge variant="outline" className="text-sm py-1.5 px-3">{assignedGuestIds.length} zugewiesen</Badge>
-            <Badge variant="outline" className="text-sm py-1.5 px-3 text-champagne border-champagne/30">{unassigned.length} offen</Badge>
-            <div className="flex rounded-xl border border-border/50 overflow-hidden">
-              <button onClick={() => setView("list")} className={cn("px-3 py-2 text-sm flex items-center gap-1.5 transition-colors", view === "list" ? "bg-champagne text-accent-foreground" : "hover:bg-secondary")}>
-                <List className="h-3.5 w-3.5" /> Liste
+          <div className="flex flex-wrap gap-2 md:gap-3 items-center">
+            <Badge variant="outline" className="text-xs md:text-sm py-1 md:py-1.5 px-2 md:px-3">{assignedGuestIds.length} zugewiesen</Badge>
+            <Badge variant="outline" className="text-xs md:text-sm py-1 md:py-1.5 px-2 md:px-3 text-champagne border-champagne/30">{unassigned.length} offen</Badge>
+            <div className="flex rounded-xl border border-border/50 overflow-hidden ml-auto">
+              <button onClick={() => setView("list")} className={cn("px-3 py-2 text-xs md:text-sm flex items-center gap-1.5 transition-colors min-h-[44px] md:min-h-0", view === "list" ? "bg-champagne text-accent-foreground" : "hover:bg-secondary")}>
+                <List className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Liste</span>
               </button>
-              <button onClick={() => setView("room")} className={cn("px-3 py-2 text-sm flex items-center gap-1.5 transition-colors", view === "room" ? "bg-champagne text-accent-foreground" : "hover:bg-secondary")}>
-                <LayoutGrid className="h-3.5 w-3.5" /> Raumansicht
+              <button onClick={() => setView("room")} className={cn("px-3 py-2 text-xs md:text-sm flex items-center gap-1.5 transition-colors min-h-[44px] md:min-h-0", view === "room" ? "bg-champagne text-accent-foreground" : "hover:bg-secondary")}>
+                <LayoutGrid className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Raumansicht</span>
               </button>
             </div>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-6">
+        <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 md:gap-6">
           {/* Guest Pool */}
-          <div className="lg:col-span-1 p-5 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 max-h-[75vh] overflow-y-auto">
+          <div className="lg:col-span-1 p-4 md:p-5 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 max-h-[40vh] lg:max-h-[75vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Gäste</h2>
               <Button variant="outline" size="sm" onClick={() => setShowAddTable(true)} className="gap-1 text-xs h-7">
@@ -150,7 +150,7 @@ const TablePlan = () => {
               <EmptyState illustration={<TablePlanIllustration />} title="Noch keine Tische erstellt" description="Erstellt euren ersten Tisch und beginnt mit der Sitzordnung." actionLabel="Ersten Tisch erstellen" onAction={() => setShowAddTable(true)} />
             ) : view === "list" ? (
               <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {tables.map(table => {
                     const tableGuests = table.guests.map(id => getGuest(id)).filter(Boolean);
                     return (
@@ -185,8 +185,8 @@ const TablePlan = () => {
               /* Room View */
               <div
                 ref={roomRef}
-                className="relative rounded-2xl bg-card border-2 border-dashed border-border/50 shadow-elegant overflow-hidden select-none"
-                style={{ height: "600px" }}
+                style={{ height: "400px", minHeight: "400px" }}
+                className="relative rounded-2xl bg-card border-2 border-dashed border-border/50 shadow-elegant overflow-auto select-none md:overflow-hidden"
                 onMouseMove={handleRoomMouseMove}
                 onMouseUp={handleRoomMouseUp}
                 onMouseLeave={handleRoomMouseUp}

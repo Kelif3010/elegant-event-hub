@@ -67,7 +67,7 @@ const Guests = () => {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-serif font-semibold">Gästeverwaltung</h1>
+            <h1 className="text-2xl md:text-3xl font-serif font-semibold">Gästeverwaltung</h1>
             <p className="text-muted-foreground">{guestList.length} Gäste · {guestList.filter(g => g.status === "confirmed").length} zugesagt</p>
           </div>
           <Button className="shadow-elegant" onClick={openAdd}><UserPlus className="h-4 w-4 mr-2" /> Gast hinzufügen</Button>
@@ -78,13 +78,13 @@ const Guests = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input placeholder="Gäste suchen..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {[{ key: "all", label: "Alle" }, { key: "confirmed", label: "Zugesagt" }, { key: "pending", label: "Ausstehend" }, { key: "declined", label: "Abgesagt" }].map((f) => (
-              <Button key={f.key} variant={filter === f.key ? "default" : "outline"} size="sm" onClick={() => setFilter(f.key)}>{f.label}</Button>
+              <Button key={f.key} variant={filter === f.key ? "default" : "outline"} size="sm" className="min-h-[44px] md:min-h-0" onClick={() => setFilter(f.key)}>{f.label}</Button>
             ))}
-            <div className="flex border rounded-lg overflow-hidden ml-2">
-              <button onClick={() => setView("table")} className={cn("p-2", view === "table" ? "bg-secondary" : "hover:bg-secondary/50")}><LayoutList className="h-4 w-4" /></button>
-              <button onClick={() => setView("card")} className={cn("p-2", view === "card" ? "bg-secondary" : "hover:bg-secondary/50")}><LayoutGrid className="h-4 w-4" /></button>
+            <div className="flex border rounded-lg overflow-hidden ml-auto md:ml-2">
+              <button onClick={() => setView("table")} className={cn("p-2.5 md:p-2 min-w-[44px] flex items-center justify-center", view === "table" ? "bg-secondary" : "hover:bg-secondary/50")}><LayoutList className="h-4 w-4" /></button>
+              <button onClick={() => setView("card")} className={cn("p-2.5 md:p-2 min-w-[44px] flex items-center justify-center", view === "card" ? "bg-secondary" : "hover:bg-secondary/50")}><LayoutGrid className="h-4 w-4" /></button>
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@ const Guests = () => {
             </div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map((g) => (
               <div key={g.id} className="p-5 rounded-2xl bg-card border border-border/50 shadow-elegant hover:shadow-elevated transition-all cursor-pointer space-y-4" onClick={() => setSelected(g)}>
                 <div className="flex items-center gap-3">

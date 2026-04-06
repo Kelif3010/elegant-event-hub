@@ -37,12 +37,12 @@ const Vendors = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <p className="text-sm text-muted-foreground">Eure Dienstleister im Überblick</p>
-            <h1 className="text-3xl md:text-4xl font-serif font-semibold">Dienstleister</h1>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-semibold">Dienstleister</h1>
           </div>
-          <Button onClick={() => setShowAddDialog(true)} className="gap-2"><Plus className="h-4 w-4" /> Dienstleister hinzufügen</Button>
+          <Button onClick={() => setShowAddDialog(true)} className="gap-2 min-h-[44px] md:min-h-0"><Plus className="h-4 w-4" /> Dienstleister hinzufügen</Button>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { label: "Dienstleister", value: vendorList.length },
             { label: "Bestätigt", value: vendorList.filter(v => v.status === "confirmed").length },
@@ -56,9 +56,9 @@ const Vendors = () => {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant={categoryFilter === "all" ? "default" : "outline"} size="sm" className="text-xs" onClick={() => setCategoryFilter("all")}>Alle</Button>
+          <Button variant={categoryFilter === "all" ? "default" : "outline"} size="sm" className="text-xs min-h-[40px] md:min-h-0" onClick={() => setCategoryFilter("all")}>Alle</Button>
           {categories.map(c => (
-            <Button key={c} variant={categoryFilter === c ? "default" : "outline"} size="sm" className="text-xs" onClick={() => setCategoryFilter(c)}>{c}</Button>
+            <Button key={c} variant={categoryFilter === c ? "default" : "outline"} size="sm" className="text-xs min-h-[40px] md:min-h-0" onClick={() => setCategoryFilter(c)}>{c}</Button>
           ))}
         </div>
 
@@ -69,7 +69,7 @@ const Vendors = () => {
             <EmptyState illustration={<VendorsIllustration />} title="Noch keine Dienstleister" description="Fügt eure Dienstleister hinzu – von Catering bis Fotografie." actionLabel="Dienstleister hinzufügen" onAction={() => setShowAddDialog(true)} />
           )
         ) : (
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filtered.map(v => (
             <button key={v.id} onClick={() => setSelected(v)} className="w-full text-left p-5 rounded-2xl bg-card border border-border/50 shadow-elegant hover:shadow-elevated transition-all space-y-3">
               <div className="flex items-start justify-between">
