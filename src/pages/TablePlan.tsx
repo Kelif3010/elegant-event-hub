@@ -95,21 +95,21 @@ const TablePlan = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="space-y-6 md:space-y-8">
+        <div className="flex flex-col gap-4">
           <div>
             <p className="text-sm text-muted-foreground">Sitzordnung planen</p>
-            <h1 className="text-3xl md:text-4xl font-serif font-semibold">Tischplan</h1>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-semibold">Tischplan</h1>
           </div>
-          <div className="flex gap-3 items-center">
-            <Badge variant="outline" className="text-sm py-1.5 px-3">{assignedGuestIds.length} zugewiesen</Badge>
-            <Badge variant="outline" className="text-sm py-1.5 px-3 text-champagne border-champagne/30">{unassigned.length} offen</Badge>
-            <div className="flex rounded-xl border border-border/50 overflow-hidden">
-              <button onClick={() => setView("list")} className={cn("px-3 py-2 text-sm flex items-center gap-1.5 transition-colors", view === "list" ? "bg-champagne text-accent-foreground" : "hover:bg-secondary")}>
-                <List className="h-3.5 w-3.5" /> Liste
+          <div className="flex flex-wrap gap-2 md:gap-3 items-center">
+            <Badge variant="outline" className="text-xs md:text-sm py-1 md:py-1.5 px-2 md:px-3">{assignedGuestIds.length} zugewiesen</Badge>
+            <Badge variant="outline" className="text-xs md:text-sm py-1 md:py-1.5 px-2 md:px-3 text-champagne border-champagne/30">{unassigned.length} offen</Badge>
+            <div className="flex rounded-xl border border-border/50 overflow-hidden ml-auto">
+              <button onClick={() => setView("list")} className={cn("px-3 py-2 text-xs md:text-sm flex items-center gap-1.5 transition-colors min-h-[44px] md:min-h-0", view === "list" ? "bg-champagne text-accent-foreground" : "hover:bg-secondary")}>
+                <List className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Liste</span>
               </button>
-              <button onClick={() => setView("room")} className={cn("px-3 py-2 text-sm flex items-center gap-1.5 transition-colors", view === "room" ? "bg-champagne text-accent-foreground" : "hover:bg-secondary")}>
-                <LayoutGrid className="h-3.5 w-3.5" /> Raumansicht
+              <button onClick={() => setView("room")} className={cn("px-3 py-2 text-xs md:text-sm flex items-center gap-1.5 transition-colors min-h-[44px] md:min-h-0", view === "room" ? "bg-champagne text-accent-foreground" : "hover:bg-secondary")}>
+                <LayoutGrid className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Raumansicht</span>
               </button>
             </div>
           </div>
