@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Gift, Plus, Trash2, Edit, Check, Search, CreditCard, Tag, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import EmptyState, { WishlistIllustration } from "@/components/EmptyState";
 
 const Wishlist = () => {
   const { theme } = useTheme();
