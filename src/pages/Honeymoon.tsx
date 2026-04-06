@@ -90,12 +90,21 @@ const Honeymoon = () => {
   };
 
   const accentColor = `hsl(${theme.accentHSL})`;
+  const isDark = theme.darkMode;
+
+  const globeImage = isDark
+    ? "//unpkg.com/three-globe/example/img/earth-night.jpg"
+    : "//unpkg.com/three-globe/example/img/earth-day.jpg";
+  const bgImage = isDark
+    ? "//unpkg.com/three-globe/example/img/night-sky.png"
+    : undefined;
 
   const pointsData = destinations.map(d => ({
     lat: d.lat,
     lng: d.lng,
-    size: 0.4 + (d.votes / (topDest?.votes || 1)) * 0.8,
-    color: d.id === selectedDest?.id ? "#ffffff" : accentColor,
+    altitude: 0.01 + (d.votes / (topDest?.votes || 1)) * 0.15,
+    radius: 0.3 + (d.votes / (topDest?.votes || 1)) * 1.2,
+    pointColor: d.id === selectedDest?.id ? "#ffffff" : accentColor,
     name: d.city,
   }));
 
@@ -104,7 +113,7 @@ const Honeymoon = () => {
     lng: d.lng,
     text: `${d.city} (${d.votes})`,
     size: 1.2,
-    color: "rgba(255,255,255,0.9)",
+    labelColor: isDark ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.8)",
   }));
 
   return (
@@ -171,19 +180,20 @@ const Honeymoon = () => {
               }>
                 <Globe
                   ref={globeRef}
-                  globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                  globeImageUrl={globeImage}
                   bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-                  backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+                  backgroundImageUrl={bgImage}
+                  backgroundColor={isDark ? "#000011" : "#f0f4f8"}
                   pointsData={pointsData}
-                  pointColor="color"
-                  pointAltitude="size"
-                  pointRadius={0.5}
+                  pointColor={(d: any) => d.pointColor}
+                  pointAltitude="altitude"
+                  pointRadius="radius"
                   pointsMerge={false}
                   onPointClick={handlePointClick}
                   labelsData={labelsData}
                   labelText="text"
                   labelSize="size"
-                  labelColor="color"
+                  labelColor={(d: any) => d.labelColor}
                   labelDotRadius={0.4}
                   labelAltitude={0.05}
                   atmosphereColor={accentColor}
