@@ -28,6 +28,7 @@ import Guestbook from "./pages/Guestbook";
 import Onboarding from "./pages/Onboarding";
 import ThemeStudio from "./pages/ThemeStudio";
 import CheckIn from "./pages/CheckIn";
+import Honeymoon from "./pages/Honeymoon";
 import AddressCollector from "./pages/AddressCollector";
 import NotFound from "./pages/NotFound";
 
