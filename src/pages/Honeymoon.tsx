@@ -180,19 +180,20 @@ const Honeymoon = () => {
               }>
                 <Globe
                   ref={globeRef}
-                  globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                  globeImageUrl={globeImage}
                   bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-                  backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+                  backgroundImageUrl={bgImage}
+                  backgroundColor={isDark ? "#000011" : "#f0f4f8"}
                   pointsData={pointsData}
-                  pointColor="color"
-                  pointAltitude="size"
-                  pointRadius={0.5}
+                  pointColor={(d: any) => d.pointColor}
+                  pointAltitude="altitude"
+                  pointRadius="radius"
                   pointsMerge={false}
                   onPointClick={handlePointClick}
                   labelsData={labelsData}
                   labelText="text"
                   labelSize="size"
-                  labelColor="color"
+                  labelColor={(d: any) => d.labelColor}
                   labelDotRadius={0.4}
                   labelAltitude={0.05}
                   atmosphereColor={accentColor}
