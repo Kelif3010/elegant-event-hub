@@ -30,6 +30,7 @@ import ThemeStudio from "./pages/ThemeStudio";
 import CheckIn from "./pages/CheckIn";
 import Honeymoon from "./pages/Honeymoon";
 import AddressCollector from "./pages/AddressCollector";
+import FoodAllergies from "./pages/FoodAllergies";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
