@@ -104,7 +104,7 @@ const Honeymoon = () => {
     lng: d.lng,
     altitude: 0.01 + (d.votes / (topDest?.votes || 1)) * 0.15,
     radius: 0.3 + (d.votes / (topDest?.votes || 1)) * 1.2,
-    pointColor: d.id === selectedDest?.id ? "#ffffff" : accentColor,
+    pointColor: d.id === selectedDest?.id ? "#ffffff" : "#C9A96E",
     name: d.city,
   }));
 

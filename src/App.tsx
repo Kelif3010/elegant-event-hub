@@ -30,6 +30,7 @@ import ThemeStudio from "./pages/ThemeStudio";
 import CheckIn from "./pages/CheckIn";
 import Honeymoon from "./pages/Honeymoon";
 import AddressCollector from "./pages/AddressCollector";
+import FoodAllergies from "./pages/FoodAllergies";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,6 +69,7 @@ const App = () => (
             <Route path="/checkin" element={<CheckIn />} />
             <Route path="/honeymoon" element={<Honeymoon />} />
             <Route path="/address-collector" element={<AddressCollector />} />
+            <Route path="/food" element={<FoodAllergies />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

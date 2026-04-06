@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heart, LayoutDashboard, Users, Mail, CalendarDays, Hotel, Settings, ChevronLeft, ChevronRight, LogOut, Wallet, Grid3X3, ListTodo, Clock, Store, Send, Camera, Music, Gift, BookOpen, Palette, UserCheck, MapPin, Search, Menu, X, Plane } from "lucide-react";
+import { Heart, LayoutDashboard, Users, Mail, CalendarDays, Hotel, Settings, ChevronLeft, ChevronRight, LogOut, Wallet, Grid3X3, ListTodo, Clock, Store, Send, Camera, Music, Gift, BookOpen, Palette, UserCheck, MapPin, Search, Menu, X, Plane, UtensilsCrossed } from "lucide-react";
 import { cn } from "@/lib/utils";
 import NotificationCenter from "@/components/NotificationCenter";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -17,6 +17,7 @@ const navSections = [
       { label: "Zeitplan", to: "/timeline", icon: Clock },
       { label: "Budget", to: "/budget", icon: Wallet },
       { label: "Dienstleister", to: "/vendors", icon: Store },
+      { label: "Essen & Allergien", to: "/food", icon: UtensilsCrossed },
     ],
   },
   {
