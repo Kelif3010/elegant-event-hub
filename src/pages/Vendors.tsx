@@ -56,9 +56,9 @@ const Vendors = () => {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant={categoryFilter === "all" ? "default" : "outline"} size="sm" className="text-xs" onClick={() => setCategoryFilter("all")}>Alle</Button>
+          <Button variant={categoryFilter === "all" ? "default" : "outline"} size="sm" className="text-xs min-h-[40px] md:min-h-0" onClick={() => setCategoryFilter("all")}>Alle</Button>
           {categories.map(c => (
-            <Button key={c} variant={categoryFilter === c ? "default" : "outline"} size="sm" className="text-xs" onClick={() => setCategoryFilter(c)}>{c}</Button>
+            <Button key={c} variant={categoryFilter === c ? "default" : "outline"} size="sm" className="text-xs min-h-[40px] md:min-h-0" onClick={() => setCategoryFilter(c)}>{c}</Button>
           ))}
         </div>
 
