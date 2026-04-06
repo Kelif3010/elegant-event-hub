@@ -28,6 +28,7 @@ import Guestbook from "./pages/Guestbook";
 import Onboarding from "./pages/Onboarding";
 import ThemeStudio from "./pages/ThemeStudio";
 import CheckIn from "./pages/CheckIn";
+import Honeymoon from "./pages/Honeymoon";
 import AddressCollector from "./pages/AddressCollector";
 import NotFound from "./pages/NotFound";
 
@@ -65,6 +66,7 @@ const App = () => (
             <Route path="/guestbook" element={<Guestbook />} />
             <Route path="/theme-studio" element={<ThemeStudio />} />
             <Route path="/checkin" element={<CheckIn />} />
+            <Route path="/honeymoon" element={<Honeymoon />} />
             <Route path="/address-collector" element={<AddressCollector />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
