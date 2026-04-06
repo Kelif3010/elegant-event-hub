@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { toast } from "sonner";
+import EmptyState, { GuestsIllustration } from "@/components/EmptyState";
 
 const statusMap: Record<string, { label: string; class: string }> = {
   confirmed: { label: "Zugesagt", class: "bg-sage-light text-sage border-sage/20" },
