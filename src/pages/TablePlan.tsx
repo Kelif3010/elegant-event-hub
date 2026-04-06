@@ -115,9 +115,9 @@ const TablePlan = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-6">
+        <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 md:gap-6">
           {/* Guest Pool */}
-          <div className="lg:col-span-1 p-5 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 max-h-[75vh] overflow-y-auto">
+          <div className="lg:col-span-1 p-4 md:p-5 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 max-h-[40vh] lg:max-h-[75vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Gäste</h2>
               <Button variant="outline" size="sm" onClick={() => setShowAddTable(true)} className="gap-1 text-xs h-7">
