@@ -39,7 +39,7 @@ const Vendors = () => {
             <p className="text-sm text-muted-foreground">Eure Dienstleister im Überblick</p>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-semibold">Dienstleister</h1>
           </div>
-          <Button onClick={() => setShowAddDialog(true)} className="gap-2"><Plus className="h-4 w-4" /> Dienstleister hinzufügen</Button>
+          <Button onClick={() => setShowAddDialog(true)} className="gap-2 min-h-[44px] md:min-h-0"><Plus className="h-4 w-4" /> Dienstleister hinzufügen</Button>
         </div>
 
         <div className="grid grid-cols-3 gap-4">
