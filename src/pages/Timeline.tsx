@@ -57,6 +57,9 @@ const Timeline = () => {
           </div>
         </div>
 
+        {events.length === 0 ? (
+          <EmptyState illustration={<TimelineIllustration />} title="Noch kein Programm erstellt" description="Plant euren Tagesablauf – von der Trauung bis zum letzten Tanz." actionLabel="Programmpunkt hinzufügen" onAction={() => setShowAddDialog(true)} />
+        ) : (
         <div className="relative">
           <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-border" />
           <div className="space-y-8">
