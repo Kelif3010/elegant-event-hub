@@ -38,6 +38,9 @@ const Guestbook = () => {
           ))}
         </div>
 
+        {entries.length === 0 ? (
+          <EmptyState illustration={<GuestbookIllustration />} title="Noch keine Einträge" description="Sobald eure Gäste Nachrichten hinterlassen, erscheinen sie hier." actionLabel="Zum Gästebuch einladen" onAction={() => {}} />
+        ) : (
         <div className="space-y-4 max-w-2xl">
           {entries.map(entry => (
             <div key={entry.id} className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant">
