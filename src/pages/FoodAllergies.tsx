@@ -310,7 +310,7 @@ const FoodAllergies = () => {
           <TabsContent value="menu" className="mt-6 space-y-6">
             {menuItems.length === 0 ? (
               <EmptyState
-                icon={<ChefHat className="h-16 w-16" />}
+                illustration={<ChefHat className="h-16 w-16" />}
                 title="Noch keine Gerichte"
                 description="Erstelle deine Menükarte mit Vorspeisen, Hauptgängen und Desserts."
                 actionLabel="Gericht hinzufügen"
