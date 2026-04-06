@@ -41,6 +41,7 @@ const navSections = [
     label: "Hochzeitstag",
     items: [
       { label: "Check-in", to: "/checkin", icon: UserCheck },
+      { label: "Flitterwochen", to: "/honeymoon", icon: Plane },
     ],
   },
   {
