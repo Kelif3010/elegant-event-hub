@@ -92,6 +92,7 @@ const Timeline = () => {
             })}
           </div>
         </div>
+        )}
 
         <div className="p-5 rounded-2xl bg-gradient-to-r from-accent/10 to-secondary border border-accent/10 shadow-elegant">
           <div className="flex items-center gap-4 overflow-x-auto pb-1">

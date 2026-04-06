@@ -10,6 +10,7 @@ import { Mail, MessageCircle, Link2, Search, Send, Check, Eye, Sparkles, Filter,
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
+import EmptyState, { InvitationsIllustration } from "@/components/EmptyState";
 
 type InviteStatus = "not_sent" | "sent" | "opened" | "reminded" | "rsvp_done";
 const statusConfig: Record<InviteStatus, { label: string; color: string; dot: string }> = {

@@ -214,6 +214,7 @@ const PhotoGallery = () => {
             </div>
           ))}
         </div>
+        )}
       </div>
 
       {/* Fullscreen Slideshow */}
