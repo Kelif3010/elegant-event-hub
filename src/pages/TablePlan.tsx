@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Users, GripVertical, X, ArrowRight, List, LayoutGrid, Circle, Square, RectangleHorizontal, Trash2, Edit3 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import EmptyState, { TablePlanIllustration } from "@/components/EmptyState";
 
 type TableShape = "round" | "rectangle" | "square";
 type Table = { id: string; name: string; shape: TableShape; seats: number; x: number; y: number; guests: string[] };
