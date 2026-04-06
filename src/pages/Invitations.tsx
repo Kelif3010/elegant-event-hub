@@ -76,7 +76,7 @@ const Invitations = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <p className="text-sm text-muted-foreground">Einladungs-Management</p>
-            <h1 className="text-3xl md:text-4xl font-serif font-semibold">Einladungen</h1>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-semibold">Einladungen</h1>
           </div>
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => setShowTemplateDesigner(true)} className="gap-2"><Sparkles className="h-4 w-4" /> Template Designer</Button>
