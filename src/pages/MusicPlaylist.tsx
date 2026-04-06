@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Music, ThumbsUp, ExternalLink, Link2, Trash2, Search, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import EmptyState, { MusicIllustration } from "@/components/EmptyState";
 
 const MusicPlaylist = () => {
   const [songs, setSongs] = useState(playlistSongs);
