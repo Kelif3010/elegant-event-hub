@@ -84,6 +84,7 @@ const Vendors = () => {
             </button>
           ))}
         </div>
+        )}
       </div>
 
       <Sheet open={!!selected} onOpenChange={() => setSelected(null)}>

@@ -124,6 +124,7 @@ const MusicPlaylist = () => {
             </div>
           ))}
         </div>
+        )}
       </div>
     </DashboardLayout>
   );

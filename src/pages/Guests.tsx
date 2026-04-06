@@ -148,10 +148,11 @@ const Guests = () => {
         )}
 
         {filtered.length === 0 && (
-          <div className="text-center py-16 space-y-3">
-            <div className="w-16 h-16 rounded-full bg-secondary mx-auto flex items-center justify-center"><Search className="h-6 w-6 text-muted-foreground" /></div>
-            <h3 className="font-serif text-lg font-semibold">Keine Gäste gefunden</h3>
-          </div>
+          search || filter !== "all" ? (
+            <EmptyState illustration={<GuestsIllustration />} title="Keine Gäste gefunden" description="Versuche einen anderen Suchbegriff oder Filter." />
+          ) : (
+            <EmptyState illustration={<GuestsIllustration />} title="Noch keine Gäste eingeladen" description="Füge eure ersten Gäste hinzu und beginnt mit der Planung eurer Feier." actionLabel="Ersten Gast hinzufügen" onAction={openAdd} />
+          )
         )}
 
         {/* Detail Sheet */}
