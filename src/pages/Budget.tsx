@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { Plus, TrendingUp, Wallet, CreditCard, CheckCircle2, Clock, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
+import EmptyState, { BudgetIllustration } from "@/components/EmptyState";
 
 const totalBudget = budgetCategories.reduce((s, c) => s + c.budget, 0);
 const totalSpent = budgetCategories.reduce((s, c) => s + c.spent, 0);
@@ -202,10 +203,11 @@ const Budget = () => {
               </tbody>
             </table>
             {filteredExpenses.length === 0 && (
-              <div className="text-center py-12 text-muted-foreground">
-                <CreditCard className="h-8 w-8 mx-auto mb-3 opacity-40" />
-                <p>Keine Ausgaben gefunden.</p>
-              </div>
+              selectedCategory || showPaid !== "all" ? (
+                <EmptyState illustration={<BudgetIllustration />} title="Keine Ausgaben gefunden" description="Ändere den Filter oder die Kategorie." />
+              ) : (
+                <EmptyState illustration={<BudgetIllustration />} title="Noch keine Ausgaben erfasst" description="Beginnt euer Budget zu tracken und behaltet den Überblick über alle Kosten." actionLabel="Erste Ausgabe hinzufügen" onAction={() => {}} />
+              )
             )}
           </div>
         </div>

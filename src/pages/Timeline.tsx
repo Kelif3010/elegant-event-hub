@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Plus, Clock, MapPin, Edit, Sparkles, Heart, GlassWater, Utensils, Music, Pizza, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import EmptyState, { TimelineIllustration } from "@/components/EmptyState";
 
 const iconMap: Record<string, typeof Sparkles> = { sparkles: Sparkles, heart: Heart, "glass-water": GlassWater, utensils: Utensils, music: Music, pizza: Pizza };
 
@@ -56,6 +57,9 @@ const Timeline = () => {
           </div>
         </div>
 
+        {events.length === 0 ? (
+          <EmptyState illustration={<TimelineIllustration />} title="Noch kein Programm erstellt" description="Plant euren Tagesablauf – von der Trauung bis zum letzten Tanz." actionLabel="Programmpunkt hinzufügen" onAction={() => setShowAddDialog(true)} />
+        ) : (
         <div className="relative">
           <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-border" />
           <div className="space-y-8">
@@ -88,6 +92,7 @@ const Timeline = () => {
             })}
           </div>
         </div>
+        )}
 
         <div className="p-5 rounded-2xl bg-gradient-to-r from-accent/10 to-secondary border border-accent/10 shadow-elegant">
           <div className="flex items-center gap-4 overflow-x-auto pb-1">

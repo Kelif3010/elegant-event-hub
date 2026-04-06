@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Plus, CheckCircle2, Circle, Clock, ListTodo } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import EmptyState, { TasksIllustration } from "@/components/EmptyState";
 
 type TaskStatus = "all" | "open" | "in-progress" | "done";
 
@@ -130,10 +131,11 @@ const Tasks = () => {
             );
           })}
           {filtered.length === 0 && (
-            <div className="text-center py-16 text-muted-foreground">
-              <ListTodo className="h-10 w-10 mx-auto mb-3 opacity-40" />
-              <p className="font-serif text-lg">Keine Aufgaben gefunden</p>
-            </div>
+            filter !== "all" || categoryFilter !== "all" ? (
+              <EmptyState illustration={<TasksIllustration />} title="Keine Aufgaben gefunden" description="Ändere den Filter, um andere Aufgaben anzuzeigen." />
+            ) : (
+              <EmptyState illustration={<TasksIllustration />} title="Keine Aufgaben vorhanden" description="Erstellt eure erste Aufgabe und behaltet die Hochzeitsplanung im Blick." actionLabel="Erste Aufgabe erstellen" onAction={() => setShowAddDialog(true)} />
+            )
           )}
         </div>
       </div>

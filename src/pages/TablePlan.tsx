@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Users, GripVertical, X, ArrowRight, List, LayoutGrid, Circle, Square, RectangleHorizontal, Trash2, Edit3 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import EmptyState, { TablePlanIllustration } from "@/components/EmptyState";
 
 type TableShape = "round" | "rectangle" | "square";
 type Table = { id: string; name: string; shape: TableShape; seats: number; x: number; y: number; guests: string[] };
@@ -145,7 +146,9 @@ const TablePlan = () => {
 
           {/* List / Room View */}
           <div className="lg:col-span-3">
-            {view === "list" ? (
+            {tables.length === 0 ? (
+              <EmptyState illustration={<TablePlanIllustration />} title="Noch keine Tische erstellt" description="Erstellt euren ersten Tisch und beginnt mit der Sitzordnung." actionLabel="Ersten Tisch erstellen" onAction={() => setShowAddTable(true)} />
+            ) : view === "list" ? (
               <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {tables.map(table => {
