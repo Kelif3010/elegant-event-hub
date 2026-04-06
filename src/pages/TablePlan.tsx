@@ -185,8 +185,8 @@ const TablePlan = () => {
               /* Room View */
               <div
                 ref={roomRef}
-                className="relative rounded-2xl bg-card border-2 border-dashed border-border/50 shadow-elegant overflow-hidden select-none"
-                style={{ height: "600px" }}
+                style={{ height: "400px", minHeight: "400px" }}
+                className="relative rounded-2xl bg-card border-2 border-dashed border-border/50 shadow-elegant overflow-auto select-none md:overflow-hidden"
                 onMouseMove={handleRoomMouseMove}
                 onMouseUp={handleRoomMouseUp}
                 onMouseLeave={handleRoomMouseUp}

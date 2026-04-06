@@ -202,14 +202,13 @@ const Invitations = () => {
 
         {/* Bulk Actions Floating Bar */}
         {selected.length > 0 && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
-            <div className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-card border border-border/50 shadow-elevated backdrop-blur-sm">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-fade-in w-[calc(100%-2rem)] max-w-xl">
+            <div className="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-3 rounded-2xl bg-card border border-border/50 shadow-elevated backdrop-blur-sm flex-wrap justify-center">
               <span className="text-sm font-medium">{selected.length} ausgewählt</span>
-              <div className="w-px h-6 bg-border" />
-              <Button size="sm" variant="outline" onClick={() => bulkAction("Erinnerung gesendet")} className="text-xs gap-1"><RefreshCw className="h-3 w-3" /> Erinnerung</Button>
-              <Button size="sm" variant="outline" onClick={() => bulkAction("Erneut gesendet")} className="text-xs gap-1"><Send className="h-3 w-3" /> Erneut senden</Button>
-              <Button size="sm" variant="outline" onClick={() => bulkAction("Als gesendet markiert")} className="text-xs gap-1"><Check className="h-3 w-3" /> Als gesendet</Button>
-              <Button size="sm" variant="ghost" onClick={() => setSelected([])}><span className="text-xs">Abbrechen</span></Button>
+              <div className="w-px h-6 bg-border hidden md:block" />
+              <Button size="sm" variant="outline" onClick={() => bulkAction("Erinnerung gesendet")} className="text-xs gap-1 min-h-[40px]"><RefreshCw className="h-3 w-3" /> Erinnerung</Button>
+              <Button size="sm" variant="outline" onClick={() => bulkAction("Erneut gesendet")} className="text-xs gap-1 min-h-[40px]"><Send className="h-3 w-3" /> Senden</Button>
+              <Button size="sm" variant="ghost" onClick={() => setSelected([])} className="min-h-[40px]"><span className="text-xs">✕</span></Button>
             </div>
           </div>
         )}
