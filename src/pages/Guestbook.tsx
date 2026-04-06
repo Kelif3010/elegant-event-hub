@@ -4,6 +4,7 @@ import { guestbookEntries } from "@/data/mockData";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Trash2, Heart, Download } from "lucide-react";
+import EmptyState, { GuestbookIllustration } from "@/components/EmptyState";
 
 const Guestbook = () => {
   const [entries, setEntries] = useState(guestbookEntries);
