@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Heart, LayoutDashboard, Users, Mail, CalendarDays, Hotel, Settings, ChevronLeft, ChevronRight, LogOut, Wallet, Grid3X3, ListTodo, Clock, Store, Send, Camera, Music, Gift, BookOpen, Palette, UserCheck, MapPin, Search, Menu, X } from "lucide-react";
+import { Heart, LayoutDashboard, Users, Mail, CalendarDays, Hotel, Settings, ChevronLeft, ChevronRight, LogOut, Wallet, Grid3X3, ListTodo, Clock, Store, Send, Camera, Music, Gift, BookOpen, Palette, UserCheck, MapPin, Search, Menu, X, Plane } from "lucide-react";
 import { cn } from "@/lib/utils";
 import NotificationCenter from "@/components/NotificationCenter";
 import { useTheme } from "@/contexts/ThemeContext";
