@@ -42,7 +42,7 @@ const Vendors = () => {
           <Button onClick={() => setShowAddDialog(true)} className="gap-2 min-h-[44px] md:min-h-0"><Plus className="h-4 w-4" /> Dienstleister hinzufügen</Button>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { label: "Dienstleister", value: vendorList.length },
             { label: "Bestätigt", value: vendorList.filter(v => v.status === "confirmed").length },
