@@ -78,13 +78,13 @@ const Guests = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input placeholder="Gäste suchen..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {[{ key: "all", label: "Alle" }, { key: "confirmed", label: "Zugesagt" }, { key: "pending", label: "Ausstehend" }, { key: "declined", label: "Abgesagt" }].map((f) => (
-              <Button key={f.key} variant={filter === f.key ? "default" : "outline"} size="sm" onClick={() => setFilter(f.key)}>{f.label}</Button>
+              <Button key={f.key} variant={filter === f.key ? "default" : "outline"} size="sm" className="min-h-[44px] md:min-h-0" onClick={() => setFilter(f.key)}>{f.label}</Button>
             ))}
-            <div className="flex border rounded-lg overflow-hidden ml-2">
-              <button onClick={() => setView("table")} className={cn("p-2", view === "table" ? "bg-secondary" : "hover:bg-secondary/50")}><LayoutList className="h-4 w-4" /></button>
-              <button onClick={() => setView("card")} className={cn("p-2", view === "card" ? "bg-secondary" : "hover:bg-secondary/50")}><LayoutGrid className="h-4 w-4" /></button>
+            <div className="flex border rounded-lg overflow-hidden ml-auto md:ml-2">
+              <button onClick={() => setView("table")} className={cn("p-2.5 md:p-2 min-w-[44px] flex items-center justify-center", view === "table" ? "bg-secondary" : "hover:bg-secondary/50")}><LayoutList className="h-4 w-4" /></button>
+              <button onClick={() => setView("card")} className={cn("p-2.5 md:p-2 min-w-[44px] flex items-center justify-center", view === "card" ? "bg-secondary" : "hover:bg-secondary/50")}><LayoutGrid className="h-4 w-4" /></button>
             </div>
           </div>
         </div>
