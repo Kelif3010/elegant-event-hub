@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Camera, Download, Eye, Search, Star, Upload, X, Play, Shield, Check, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import EmptyState, { PhotosIllustration } from "@/components/EmptyState";
 
 type ModerationStatus = "approved" | "pending" | "private";
 
