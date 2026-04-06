@@ -115,8 +115,8 @@ const Invitations = () => {
           <Input placeholder="Gast suchen..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
         </div>
 
-        {/* Table */}
-        <div className="rounded-2xl bg-card border border-border/50 shadow-elegant overflow-hidden">
+        {/* Table - Desktop */}
+        <div className="rounded-2xl bg-card border border-border/50 shadow-elegant overflow-hidden hidden md:block">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -154,7 +154,6 @@ const Invitations = () => {
                         <Badge className={cn("text-xs border-0", statusConfig[g.inviteStatus].color)}>
                           {statusConfig[g.inviteStatus].label}
                         </Badge>
-                        {g.sentDate && g.inviteStatus !== "not_sent" && <span className="text-[10px] text-muted-foreground">{g.sentDate}</span>}
                       </div>
                     </td>
                     <td className="p-3"><Badge variant="outline" className="text-xs">{g.group}</Badge></td>
@@ -170,6 +169,35 @@ const Invitations = () => {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Mobile Card List */}
+        <div className="md:hidden space-y-3">
+          {filtered.map(g => (
+            <div key={g.id} className={cn("p-4 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-3", selected.includes(g.id) && "ring-2 ring-accent/30")}>
+              <div className="flex items-center gap-3">
+                <Checkbox checked={selected.includes(g.id)} onCheckedChange={() => toggleSelect(g.id)} />
+                <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-sm font-medium shrink-0">{g.firstName[0]}{g.lastName[0]}</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{g.firstName} {g.lastName}</p>
+                  <p className="text-xs text-muted-foreground truncate">{g.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className={cn("w-2 h-2 rounded-full", statusConfig[g.inviteStatus].dot)} />
+                <Badge className={cn("text-xs border-0", statusConfig[g.inviteStatus].color)}>{statusConfig[g.inviteStatus].label}</Badge>
+                <div className="flex items-center gap-1 text-muted-foreground ml-auto">
+                  {channelIcon(g.channel)}
+                  <span className="text-xs capitalize">{g.channel}</span>
+                </div>
+              </div>
+              {g.inviteStatus !== "rsvp_done" && (
+                <Button size="sm" variant="outline" className="w-full text-xs gap-1 min-h-[44px]" onClick={() => toast({ title: "Erneut gesendet", description: `Einladung an ${g.firstName} erneut gesendet.` })}>
+                  <RefreshCw className="h-3 w-3" /> Erneut senden
+                </Button>
+              )}
+            </div>
+          ))}
         </div>
 
         {/* Bulk Actions Floating Bar */}
