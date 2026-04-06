@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { Plus, TrendingUp, Wallet, CreditCard, CheckCircle2, Clock, Filter } from "lucide-react";
 import { cn } from "@/lib/utils";
+import EmptyState, { BudgetIllustration } from "@/components/EmptyState";
 
 const totalBudget = budgetCategories.reduce((s, c) => s + c.budget, 0);
 const totalSpent = budgetCategories.reduce((s, c) => s + c.spent, 0);
