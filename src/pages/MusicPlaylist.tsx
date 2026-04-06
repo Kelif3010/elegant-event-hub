@@ -93,6 +93,13 @@ const MusicPlaylist = () => {
         </div>
 
         {/* Song List */}
+        {filtered.length === 0 ? (
+          search || filter !== "all" ? (
+            <EmptyState illustration={<MusicIllustration />} title="Keine Songs gefunden" description="Versuche einen anderen Suchbegriff oder Kategorie." />
+          ) : (
+            <EmptyState illustration={<MusicIllustration />} title="Noch keine Songs" description="Lasst eure Gäste Songs über das Portal vorschlagen oder fügt selbst welche hinzu." actionLabel="Song vorschlagen" onAction={() => {}} />
+          )
+        ) : (
         <div className="space-y-2">
           {filtered.map((song, i) => (
             <div key={song.id} className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border/50 hover:shadow-elegant transition-shadow">
