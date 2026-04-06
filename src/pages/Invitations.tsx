@@ -78,9 +78,9 @@ const Invitations = () => {
             <p className="text-sm text-muted-foreground">Einladungs-Management</p>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-semibold">Einladungen</h1>
           </div>
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setShowTemplateDesigner(true)} className="gap-2"><Sparkles className="h-4 w-4" /> Template Designer</Button>
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground gap-2"><Send className="h-4 w-4" /> Alle einladen</Button>
+          <div className="flex flex-wrap gap-2 md:gap-3">
+            <Button variant="outline" onClick={() => setShowTemplateDesigner(true)} className="gap-2 min-h-[44px] md:min-h-0 text-xs md:text-sm"><Sparkles className="h-4 w-4" /> Template Designer</Button>
+            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground gap-2 min-h-[44px] md:min-h-0 text-xs md:text-sm"><Send className="h-4 w-4" /> Alle einladen</Button>
           </div>
         </div>
 
