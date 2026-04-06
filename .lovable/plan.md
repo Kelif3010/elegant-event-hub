@@ -1,39 +1,52 @@
 
 
-# Empty States mit Illustrationen und CTAs
+# Budget-Seite: Redesign mit Tabs, Add-Dialog und Bezahlt-Toggle
 
-## Übersicht
+## Problem
+1. "Ausgabe hinzufügen" Button macht nichts — es fehlt ein Dialog
+2. Ausgaben können nicht als bezahlt/offen markiert werden (nur Anzeige)
+3. Alles auf einer Seite → zu viel Scrollen
 
-Erstelle eine wiederverwendbare `EmptyState`-Komponente und ersetze alle bestehenden minimalen Empty States durch visuell ansprechende Versionen mit SVG-Illustrationen, beschreibendem Text und Call-to-Action Buttons.
+## Lösung: Tab-basiertes Layout
 
-## Komponente
+Die Budget-Seite bekommt **3 horizontale Reiter** direkt unter den Summary-Cards:
 
-**Neue Datei: `src/components/EmptyState.tsx`**
-- Props: `icon`, `title`, `description`, `actionLabel`, `onAction`, `illustration` (SVG inline)
-- Layout: Zentriert, großes SVG-Illustration oben, Titel (font-serif), Beschreibung (muted), Button mit accent-Farbe
-- Sanfte fade-in Animation (animate-fade-in)
-- Jede Seite bekommt eine eigene thematische SVG-Illustration (abstrakte, elegante Linienzeichnungen passend zum Hochzeitsthema)
+```text
+┌─────────────┬──────────────┬──────────────┐
+│  Übersicht  │  Kategorien  │ Einzelposten │
+└─────────────┴──────────────┴──────────────┘
+```
 
-## Betroffene Seiten und ihre Empty States
+- **Übersicht**: Summary-Cards + beide Charts (Pie + Bar) — der schnelle Finanzüberblick
+- **Kategorien**: Kategorie-Liste mit Progress-Bars, klickbar zum Filtern
+- **Einzelposten**: Ausgaben-Tabelle mit Filter (Alle/Bezahlt/Offen), Toggle zum Abhaken
 
-| Seite | Illustration | Titel | CTA |
-|---|---|---|---|
-| **Guests** | Personen-Silhouetten | "Noch keine Gäste eingeladen" | "Ersten Gast hinzufügen" → öffnet Add-Dialog |
-| **Tasks** | Checkliste mit Häkchen | "Keine Aufgaben vorhanden" | "Erste Aufgabe erstellen" → öffnet Add-Dialog |
-| **Budget** | Münzen/Sparkasse | "Noch keine Ausgaben erfasst" | "Erste Ausgabe hinzufügen" → öffnet Add-Dialog |
-| **Timeline** | Uhr/Zeitstrahl | "Noch kein Programm erstellt" | "Programmpunkt hinzufügen" → öffnet Add-Dialog |
-| **Vendors** | Handshake/Vertrag | "Noch keine Dienstleister" | "Dienstleister hinzufügen" → öffnet Add-Dialog |
-| **PhotoGallery** | Kamera/Bilderrahmen | "Noch keine Fotos" | "Erstes Foto hochladen" → öffnet Upload |
-| **Wishlist** | Geschenk/Herz | "Noch keine Wünsche" | "Ersten Wunsch hinzufügen" → öffnet Add-Dialog |
-| **Guestbook** | Buch/Feder | "Noch keine Einträge" | "Zum Gästebuch einladen" |
-| **MusicPlaylist** | Musiknote | "Noch keine Songs" | "Song vorschlagen" → öffnet Add |
-| **TablePlan** | Tisch-Layout | "Noch keine Tische erstellt" | "Ersten Tisch erstellen" |
-| **Invitations** | Briefumschlag | "Noch keine Einladungen" | "Einladung erstellen" |
+So sieht man sofort alles Wichtige ohne Scrollen.
 
-## Technische Umsetzung
+## Neue Features
 
-1. **EmptyState-Komponente** mit inline SVG-Illustrationen als React-Komponenten (keine externen Dateien nötig)
-2. **Pro Seite**: Bestehende `filtered.length === 0` / `taskList.length === 0` Blöcke durch `<EmptyState>` ersetzen, wobei der CTA-Button die jeweilige `setShowAddDialog(true)` Funktion aufruft
-3. **Zwei Varianten**: "Keine Daten vorhanden" (leere Liste) vs. "Keine Treffer" (Filter aktiv) — bei aktivem Filter kürzerer Text ohne CTA
-4. SVG-Illustrationen: Minimalistische Linien-Art im eleganten Stil, einfarbig mit accent-Farbe aus ThemeContext
+### 1. "Ausgabe hinzufügen" Dialog
+Pop-up mit Feldern:
+- Titel (Text)
+- Kategorie (Select aus budgetCategories)
+- Betrag (Number, €)
+- Anbieter (Text)
+- Datum (Date)
+- Status: Bezahlt/Offen (Switch)
+
+Neue Ausgabe wird per `useState` zur lokalen Liste hinzugefügt.
+
+### 2. Bezahlt-Toggle pro Ausgabe
+In der Einzelposten-Tabelle: Klick auf den Status-Badge (oder Checkbox) toggelt zwischen "Bezahlt" und "Offen". Die Summary-Cards oben aktualisieren sich live.
+
+### 3. Kategorie hinzufügen
+Im Kategorien-Tab: Button "Kategorie hinzufügen" mit kleinem Dialog (Name + Budget + Farbe).
+
+## Technisch
+
+- **Eine Datei**: `Budget.tsx` komplett überarbeiten
+- `useState` für `activeTab`, `expenses` (kopiert aus mockData), `categories`, `showAddDialog`, `showAddCategoryDialog`
+- Tabs via `Tabs/TabsList/TabsTrigger/TabsContent` (bereits vorhanden)
+- Dialog via `Dialog/DialogContent` (bereits vorhanden)
+- Bestehende Recharts-Charts bleiben, werden nur in den Übersicht-Tab verschoben
 
