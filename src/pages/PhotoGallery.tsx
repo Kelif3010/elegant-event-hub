@@ -157,6 +157,13 @@ const PhotoGallery = () => {
         </div>
 
         {/* Masonry Grid */}
+        {filtered.length === 0 ? (
+          search || filter !== "all" ? (
+            <EmptyState illustration={<PhotosIllustration />} title="Keine Fotos gefunden" description="Versuche einen anderen Filter oder Suchbegriff." />
+          ) : (
+            <EmptyState illustration={<PhotosIllustration />} title="Noch keine Fotos" description="Ladet eure ersten Fotos hoch oder lasst eure Gäste Bilder über das Portal teilen." actionLabel="Erstes Foto hochladen" onAction={mockUpload} />
+          )
+        ) : (
         <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
           {filtered.map(photo => (
             <div key={photo.id} className="break-inside-avoid group relative rounded-2xl overflow-hidden bg-card border border-border/50 shadow-elegant hover:shadow-elevated transition-all">
