@@ -1,563 +1,560 @@
-import { useState, useCallback } from "react";
-import { dashboardStats, tasks, recentActivity, weddingInfo, guestbookEntries, galleryPhotos, playlistSongs, wishlistItems, guests } from "@/data/mockData";
-import { Users, UserCheck, Clock, UserX, Baby, Hotel, Bus, UtensilsCrossed, CheckCircle2, ListTodo, Heart, CalendarDays, TrendingUp, Bell, Sparkles, Camera, Music, Gift, BookOpen, Send, Globe, GripVertical, Plus, X, RotateCcw, Settings2, Maximize2, Minimize2 } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import {
+  Users, CheckCircle, XCircle, Clock, Utensils,
+  ListChecks, TrendingUp, ArrowRight, Settings2, Plus, X, RotateCcw,
+  Camera, Music, Gift, BookOpen, Globe, Send, Heart, MessageSquare, Plane,
+  LayoutGrid, List, AlertTriangle,
+} from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useAnimatedNumber } from "@/hooks/useAnimatedNumber";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { cn } from "@/lib/utils";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Switch } from "@/components/ui/switch";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
-const s = dashboardStats;
-const weddingDate = new Date(weddingInfo.date);
-const today = new Date();
-const daysLeft = Math.max(0, Math.ceil((weddingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
-
-const statCards = [
-  { label: "Gäste gesamt", value: s.totalGuests, icon: Users, color: "bg-champagne-light text-champagne" },
-  { label: "Zugesagt", value: s.confirmed, icon: UserCheck, color: "bg-sage-light text-sage" },
-  { label: "Ausstehend", value: s.pending, icon: Clock, color: "bg-champagne-light text-champagne" },
-  { label: "Abgesagt", value: s.declined, icon: UserX, color: "bg-rose-light text-rose" },
-];
-
-const honeymoonVotes = [
-  { destination: "Bali, Indonesien", country: "ID", votes: 18, emoji: "🌴", lat: -8.4, lng: 115.2 },
-  { destination: "Santorini, Griechenland", country: "GR", votes: 14, emoji: "🏛️", lat: 36.4, lng: 25.4 },
-  { destination: "Malediven", country: "MV", votes: 12, emoji: "🏝️", lat: 3.2, lng: 73.2 },
-  { destination: "Toskana, Italien", country: "IT", votes: 9, emoji: "🍷", lat: 43.3, lng: 11.3 },
-  { destination: "Japan", country: "JP", votes: 7, emoji: "🗾", lat: 36.2, lng: 138.3 },
-  { destination: "Island", country: "IS", votes: 5, emoji: "🌋", lat: 64.9, lng: -19.0 },
-];
-const totalHoneymoonVotes = honeymoonVotes.reduce((a, b) => a + b.votes, 0);
-
-type WidgetId = "stats" | "rsvp" | "activity" | "tasks" | "budget" | "quickstats" | "quickactions" | "guestbook" | "photos" | "music" | "wishlist" | "invitations" | "honeymoon";
-type WidgetSize = "xs" | "sm" | "lg" | "xl";
+// ── Widget definitions ──
 
 interface WidgetDef {
-  id: WidgetId;
-  label: string;
+  id: string;
+  title: string;
   icon: any;
+  category: string;
+  size: "sm" | "md" | "lg";
+  colSpan?: number;
 }
 
 const allWidgets: WidgetDef[] = [
-  { id: "stats", label: "Statistik-Karten", icon: Users },
-  { id: "rsvp", label: "RSVP-Übersicht", icon: UserCheck },
-  { id: "activity", label: "Letzte Aktivitäten", icon: Bell },
-  { id: "tasks", label: "Offene Aufgaben", icon: ListTodo },
-  { id: "budget", label: "Budget", icon: TrendingUp },
-  { id: "quickstats", label: "Quick Stats", icon: Hotel },
-  { id: "quickactions", label: "Schnellaktionen", icon: Sparkles },
-  { id: "guestbook", label: "Gästebuch", icon: BookOpen },
-  { id: "photos", label: "Foto-Uploads", icon: Camera },
-  { id: "music", label: "Musik-Vorschläge", icon: Music },
-  { id: "wishlist", label: "Wunschlisten-Status", icon: Gift },
-  { id: "invitations", label: "Einladungs-Fortschritt", icon: Send },
-  { id: "honeymoon", label: "Flitterwochen-Globus", icon: Globe },
+  { id: "stats", title: "RSVP-Statistiken", icon: Users, category: "Basis", size: "lg", colSpan: 4 },
+  { id: "recent_guests", title: "Letzte Rückmeldungen", icon: CheckCircle, category: "Basis", size: "md", colSpan: 2 },
+  { id: "tasks", title: "Aufgaben", icon: ListChecks, category: "Basis", size: "md", colSpan: 2 },
+  { id: "activity", title: "Letzte Aktivitäten", icon: TrendingUp, category: "Basis", size: "md", colSpan: 2 },
+  { id: "meals", title: "Essenswahl", icon: Utensils, category: "Basis", size: "sm", colSpan: 1 },
+  { id: "allergies", title: "Allergien & Diäten", icon: Utensils, category: "Basis", size: "sm", colSpan: 1 },
+  { id: "budget", title: "Budget-Übersicht", icon: TrendingUp, category: "Basis", size: "sm", colSpan: 1 },
+  { id: "guestbook", title: "Letzte Gästebuch-Einträge", icon: BookOpen, category: "Erlebnis", size: "md", colSpan: 2 },
+  { id: "photos", title: "Foto-Uploads", icon: Camera, category: "Erlebnis", size: "sm", colSpan: 1 },
+  { id: "music", title: "Musik-Vorschläge", icon: Music, category: "Erlebnis", size: "sm", colSpan: 1 },
+  { id: "wishlist", title: "Wunschlisten-Status", icon: Gift, category: "Erlebnis", size: "sm", colSpan: 1 },
+  { id: "invitations", title: "Einladungs-Fortschritt", icon: Send, category: "Kommunikation", size: "sm", colSpan: 1 },
+  { id: "honeymoon", title: "Flitterwochen Top-Ziele", icon: Globe, category: "Erlebnis", size: "sm", colSpan: 1 },
 ];
 
-const defaultWidgets: WidgetId[] = ["stats", "rsvp", "activity", "tasks", "budget", "quickstats", "quickactions"];
-const defaultSizes: Record<string, WidgetSize> = { stats: "xl", rsvp: "lg", activity: "sm", tasks: "lg", budget: "sm", quickstats: "sm", quickactions: "sm" };
+const defaultWidgetIds = ["stats", "recent_guests", "tasks", "activity", "meals", "allergies", "budget"];
 
-const sizeLabels: Record<WidgetSize, string> = { xs: "Sehr klein", sm: "Klein", lg: "Groß", xl: "Sehr groß" };
-const sizeColSpan: Record<WidgetSize, string> = { xs: "col-span-1", sm: "col-span-1", lg: "lg:col-span-2", xl: "lg:col-span-3" };
+// ── Animated Stat Card ──
+const AnimatedStat = ({ label, target, icon: Icon, change, color }: { label: string; target: number; icon: any; change: string; color: string }) => {
+  const value = useAnimatedNumber(target);
+  return (
+    <div className="rounded-2xl border border-border/50 bg-card p-4 flex flex-col gap-2 hover:shadow-md transition-shadow">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-medium text-muted-foreground">{label}</span>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${color}`}>
+          <Icon className="h-4 w-4" />
+        </div>
+      </div>
+      <p className="text-3xl font-bold text-foreground">{value}</p>
+      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <TrendingUp className="h-3 w-3 text-primary" /> {change}
+      </div>
+    </div>
+  );
+};
 
-const Dashboard = () => {
-  const [activeWidgets, setActiveWidgets] = useState<WidgetId[]>(() => {
-    const saved = localStorage.getItem("dashboard-widgets");
-    return saved ? JSON.parse(saved) : defaultWidgets;
-  });
-  const [widgetSizes, setWidgetSizes] = useState<Record<string, WidgetSize>>(() => {
-    const saved = localStorage.getItem("dashboard-widget-sizes");
-    return saved ? JSON.parse(saved) : defaultSizes;
-  });
+// ── Widget Renderers ──
+
+const StatsWidget = () => (
+  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <AnimatedStat label="Gäste gesamt" target={124} icon={Users} change="+8 diese Woche" color="bg-primary/10 text-primary" />
+    <AnimatedStat label="Zugesagt" target={87} icon={CheckCircle} change="+5 diese Woche" color="bg-primary/10 text-primary" />
+    <AnimatedStat label="Ausstehend" target={28} icon={Clock} change="-3 diese Woche" color="bg-accent/10 text-accent" />
+    <AnimatedStat label="Abgesagt" target={9} icon={XCircle} change="+1 diese Woche" color="bg-destructive/10 text-destructive" />
+  </div>
+);
+
+const RecentGuestsWidget = () => {
+  const guests = [
+    { name: "Sophie Weber", status: "Zugesagt", meal: "Vegetarisch", plusOne: "Ja" },
+    { name: "Thomas Müller", status: "Zugesagt", meal: "Standard", plusOne: "Nein" },
+    { name: "Maria Schmidt", status: "Ausstehend", meal: "–", plusOne: "–" },
+    { name: "Felix Braun", status: "Abgesagt", meal: "–", plusOne: "–" },
+    { name: "Anna Hoffmann", status: "Zugesagt", meal: "Vegan", plusOne: "Ja" },
+  ];
+  return (
+    <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-foreground">Letzte Rückmeldungen</h3>
+        <Link to="/guests" className="text-xs text-primary hover:underline flex items-center gap-1">Alle <ArrowRight className="h-3 w-3" /></Link>
+      </div>
+      <div className="space-y-2">
+        {guests.map((g, i) => (
+          <div key={i} className="flex items-center justify-between py-2 border-b border-border/30 last:border-0">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-semibold text-muted-foreground">
+                {g.name.split(" ").map(n => n[0]).join("")}
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">{g.name}</p>
+                <p className="text-xs text-muted-foreground">{g.meal} · Plus-One: {g.plusOne}</p>
+              </div>
+            </div>
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${g.status === "Zugesagt" ? "bg-primary/10 text-primary" : g.status === "Abgesagt" ? "bg-destructive/10 text-destructive" : "bg-accent/10 text-accent"}`}>{g.status}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const TasksWidget = () => {
+  const tasks = [
+    { task: "Blumendeko bestätigen", due: "In 3 Tagen", done: false },
+    { task: "DJ-Playlist finalisieren", due: "In 5 Tagen", done: false },
+    { task: "Tischkarten drucken", due: "In 1 Woche", done: false },
+    { task: "Menü mit Caterer abstimmen", due: "Erledigt", done: true },
+    { task: "Fotografen-Briefing", due: "Erledigt", done: true },
+  ];
+  return (
+    <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-foreground">Aufgaben</h3>
+        <Link to="/tasks" className="text-xs text-primary hover:underline flex items-center gap-1">Alle <ArrowRight className="h-3 w-3" /></Link>
+      </div>
+      <div className="space-y-1.5">
+        {tasks.map((t, i) => (
+          <div key={i} className={`flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-secondary/50 transition-colors ${t.done ? "opacity-50" : ""}`}>
+            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${t.done ? "border-primary bg-primary/10" : "border-border"}`}>
+              {t.done && <CheckCircle className="h-3 w-3 text-primary" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className={`text-sm ${t.done ? "line-through text-muted-foreground" : "text-foreground"}`}>{t.task}</p>
+            </div>
+            <span className="text-xs text-muted-foreground shrink-0">{t.due}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ActivityWidget = () => {
+  const activities = [
+    { text: "Maria Müller hat zugesagt", time: "vor 2 Stunden", icon: CheckCircle, color: "text-primary" },
+    { text: "Anna Fischer hat Allergien aktualisiert", time: "vor 5 Stunden", icon: Utensils, color: "text-accent" },
+    { text: "Paul Bauer hat Songwunsch eingereicht", time: "gestern", icon: Music, color: "text-primary" },
+    { text: "3 neue RSVP-Antworten", time: "gestern", icon: Send, color: "text-primary" },
+    { text: "Hotel Schlossblick Kontingent bestätigt", time: "vor 2 Tagen", icon: CheckCircle, color: "text-primary" },
+  ];
+  return (
+    <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-foreground">Letzte Aktivitäten</h3>
+      </div>
+      <div className="space-y-2">
+        {activities.map((a, i) => (
+          <div key={i} className="flex items-center gap-3 py-1.5">
+            <a.icon className={`h-4 w-4 shrink-0 ${a.color}`} />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-foreground truncate">{a.text}</p>
+              <p className="text-xs text-muted-foreground">{a.time}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const MealsWidget = () => (
+  <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col gap-3">
+    <h3 className="text-sm font-semibold text-foreground">Essenswahl</h3>
+    <div className="space-y-3">
+      {[
+        { label: "Standard", count: 42, pct: 48, color: "bg-primary" },
+        { label: "Vegetarisch", count: 23, pct: 26, color: "bg-accent" },
+        { label: "Vegan", count: 14, pct: 16, color: "bg-primary/60" },
+        { label: "Sonstiges", count: 8, pct: 10, color: "bg-muted-foreground/30" },
+      ].map((m, i) => (
+        <div key={i}>
+          <div className="flex justify-between text-xs mb-1">
+            <span className="text-muted-foreground">{m.label}</span>
+            <span className="font-medium text-foreground">{m.count} ({m.pct}%)</span>
+          </div>
+          <div className="h-2 rounded-full bg-secondary overflow-hidden">
+            <div className={`h-full rounded-full ${m.color} transition-all duration-700`} style={{ width: `${m.pct}%` }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const AllergiesWidget = () => (
+  <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col gap-3">
+    <h3 className="text-sm font-semibold text-foreground">Allergien & Diäten</h3>
+    <div className="space-y-2">
+      {[
+        { label: "Laktoseintoleranz", count: 5 },
+        { label: "Glutenfrei", count: 3 },
+        { label: "Nussallergie", count: 4 },
+        { label: "Halal", count: 2 },
+        { label: "Keine Angabe", count: 73 },
+      ].map((a, i) => (
+        <div key={i} className="flex items-center justify-between py-1">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+            <span className="text-sm text-foreground">{a.label}</span>
+          </div>
+          <span className="text-xs text-muted-foreground">{a.count} Gäste</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const BudgetWidget = () => {
+  const spent = useAnimatedNumber(18450);
+  const pctUsed = 74;
+  return (
+    <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col gap-3">
+      <h3 className="text-sm font-semibold text-foreground">Budget-Übersicht</h3>
+      <div className="text-center py-2">
+        <p className="text-2xl font-bold text-foreground">€{spent.toLocaleString("de-DE")}</p>
+        <p className="text-xs text-muted-foreground">von €25.000 geplant</p>
+      </div>
+      <div className="h-2 rounded-full bg-secondary overflow-hidden">
+        <div className="h-full rounded-full bg-primary transition-all duration-700" style={{ width: `${pctUsed}%` }} />
+      </div>
+      <div className="space-y-1 mt-1">
+        {[
+          { label: "Location", amount: "€5.500" },
+          { label: "Catering", amount: "€6.200" },
+          { label: "Fotograf", amount: "€2.800" },
+        ].map((b, i) => (
+          <div key={i} className="flex justify-between text-xs">
+            <span className="text-muted-foreground">{b.label}</span>
+            <span className="font-medium text-foreground">{b.amount}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const GuestbookWidget = () => (
+  <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col gap-3">
+    <div className="flex items-center justify-between">
+      <h3 className="text-sm font-semibold text-foreground">Letzte Gästebuch-Einträge</h3>
+      <Link to="/guestbook" className="text-xs text-primary hover:underline flex items-center gap-1">Alle <ArrowRight className="h-3 w-3" /></Link>
+    </div>
+    <div className="space-y-3">
+      {[
+        { author: "Sophie Weber", msg: "Wir freuen uns riesig auf eure Hochzeit! 💕", time: "vor 2 Std.", mood: "🥰" },
+        { author: "Thomas Müller", msg: "Herzlichen Glückwunsch euch beiden!", time: "vor 5 Std.", mood: "🎉" },
+        { author: "Anna Hoffmann", msg: "Ich kenne Laura schon seit dem Kindergarten...", time: "gestern", mood: "😊" },
+      ].map((e, i) => (
+        <div key={i} className="flex items-start gap-3 py-2 border-b border-border/30 last:border-0">
+          <span className="text-lg">{e.mood}</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground">{e.author}</p>
+            <p className="text-xs text-muted-foreground truncate">{e.msg}</p>
+          </div>
+          <span className="text-xs text-muted-foreground shrink-0">{e.time}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const PhotosWidget = () => {
+  const count = useAnimatedNumber(47);
+  return (
+    <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col items-center gap-2 text-center">
+      <div className="flex items-center justify-between w-full">
+        <h3 className="text-sm font-semibold text-foreground">Foto-Uploads</h3>
+        <Link to="/photos" className="text-xs text-primary hover:underline"><ArrowRight className="h-3 w-3" /></Link>
+      </div>
+      <p className="text-3xl font-bold text-foreground">{count}</p>
+      <p className="text-xs text-muted-foreground">Fotos hochgeladen</p>
+      <div className="flex gap-2 mt-1">
+        {["📸", "🌅", "💐", "🥂"].map((e, i) => (
+          <span key={i} className="text-lg">{e}</span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const MusicWidget = () => {
+  const count = useAnimatedNumber(23);
+  return (
+    <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col items-center gap-2 text-center">
+      <div className="flex items-center justify-between w-full">
+        <h3 className="text-sm font-semibold text-foreground">Musik-Vorschläge</h3>
+        <Link to="/music" className="text-xs text-primary hover:underline"><ArrowRight className="h-3 w-3" /></Link>
+      </div>
+      <p className="text-3xl font-bold text-foreground">{count}</p>
+      <p className="text-xs text-muted-foreground">Songwünsche eingereicht</p>
+      <div className="space-y-1 mt-1 w-full text-left">
+        {["Perfect – Ed Sheeran", "Marry You – Bruno Mars", "Can't Help Falling..."].map((s, i) => (
+          <p key={i} className="text-xs text-muted-foreground truncate">🎵 {s}</p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const WishlistWidget = () => (
+  <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col items-center gap-2 text-center">
+    <div className="flex items-center justify-between w-full">
+      <h3 className="text-sm font-semibold text-foreground">Wunschliste</h3>
+      <Link to="/wishlist" className="text-xs text-primary hover:underline"><ArrowRight className="h-3 w-3" /></Link>
+    </div>
+    <p className="text-3xl font-bold text-foreground">5/8</p>
+    <p className="text-xs text-muted-foreground">Wünsche reserviert</p>
+    <div className="h-2 rounded-full bg-secondary overflow-hidden w-full mt-1">
+      <div className="h-full rounded-full bg-primary transition-all duration-700" style={{ width: "62.5%" }} />
+    </div>
+  </div>
+);
+
+const InvitationsWidget = () => {
+  const sent = useAnimatedNumber(98);
+  return (
+    <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col items-center gap-2 text-center">
+      <div className="flex items-center justify-between w-full">
+        <h3 className="text-sm font-semibold text-foreground">Einladungen</h3>
+        <Link to="/invitations" className="text-xs text-primary hover:underline"><ArrowRight className="h-3 w-3" /></Link>
+      </div>
+      <p className="text-3xl font-bold text-foreground">{sent}/124</p>
+      <p className="text-xs text-muted-foreground">Einladungen versendet</p>
+      <div className="h-2 rounded-full bg-secondary overflow-hidden w-full mt-1">
+        <div className="h-full rounded-full bg-primary transition-all duration-700" style={{ width: "79%" }} />
+      </div>
+    </div>
+  );
+};
+
+const HoneymoonWidget = () => (
+  <div className="rounded-2xl border border-border/50 bg-card p-5 flex flex-col gap-3">
+    <div className="flex items-center justify-between">
+      <h3 className="text-sm font-semibold text-foreground">Flitterwochen</h3>
+      <Link to="/honeymoon" className="text-xs text-primary hover:underline"><ArrowRight className="h-3 w-3" /></Link>
+    </div>
+    <div className="space-y-2">
+      {[
+        { dest: "🏝️ Malediven", votes: 18 },
+        { dest: "🏛️ Santorini", votes: 14 },
+        { dest: "🌺 Bali", votes: 12 },
+      ].map((d, i) => (
+        <div key={i} className="flex items-center justify-between text-sm">
+          <span className="text-foreground">{d.dest}</span>
+          <span className="text-xs text-muted-foreground">{d.votes} Stimmen</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const widgetRenderers: Record<string, () => JSX.Element> = {
+  stats: StatsWidget,
+  recent_guests: RecentGuestsWidget,
+  tasks: TasksWidget,
+  activity: ActivityWidget,
+  meals: MealsWidget,
+  allergies: AllergiesWidget,
+  budget: BudgetWidget,
+  guestbook: GuestbookWidget,
+  photos: PhotosWidget,
+  music: MusicWidget,
+  wishlist: WishlistWidget,
+  invitations: InvitationsWidget,
+  honeymoon: HoneymoonWidget,
+};
+
+// ── Main Component ──
+
+const DashboardOverview = () => {
+  const [activeWidgets, setActiveWidgets] = useState<string[]>(defaultWidgetIds);
   const [editMode, setEditMode] = useState(false);
-  const [showWidgetPanel, setShowWidgetPanel] = useState(false);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
 
-  const saveWidgets = (w: WidgetId[]) => {
-    setActiveWidgets(w);
-    localStorage.setItem("dashboard-widgets", JSON.stringify(w));
+  const removeWidget = (id: string) => setActiveWidgets(activeWidgets.filter(w => w !== id));
+  const addWidget = (id: string) => { setActiveWidgets([...activeWidgets, id]); setShowAddDialog(false); };
+  const resetWidgets = () => { setActiveWidgets(defaultWidgetIds); setEditMode(false); };
+
+  const availableToAdd = allWidgets.filter(w => !activeWidgets.includes(w.id));
+
+  const pctUsed = 74;
+  const showYellowBanner = pctUsed >= 90 && pctUsed < 100;
+  const showRedBanner = pctUsed >= 100;
+
+  // Drag and drop
+  const handleDragStart = (idx: number) => {
+    if (!editMode) return;
+    setDragIdx(idx);
   };
-
-  const saveSizes = (s: Record<string, WidgetSize>) => {
-    setWidgetSizes(s);
-    localStorage.setItem("dashboard-widget-sizes", JSON.stringify(s));
+  const handleDragOver = (e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    if (!editMode) return;
+    setDragOverIdx(idx);
   };
-
-  const toggleWidget = (id: WidgetId) => {
-    const next = activeWidgets.includes(id) ? activeWidgets.filter(w => w !== id) : [...activeWidgets, id];
-    saveWidgets(next);
+  const handleDrop = (idx: number) => {
+    if (dragIdx === null || !editMode) return;
+    const newWidgets = [...activeWidgets];
+    const [moved] = newWidgets.splice(dragIdx, 1);
+    newWidgets.splice(idx, 0, moved);
+    setActiveWidgets(newWidgets);
+    setDragIdx(null);
+    setDragOverIdx(null);
   };
-
-  const removeWidget = (id: WidgetId) => saveWidgets(activeWidgets.filter(w => w !== id));
-
-  const resetWidgets = () => {
-    saveWidgets(defaultWidgets);
-    saveSizes(defaultSizes);
-    setEditMode(false);
-  };
-
-  const changeSize = (id: WidgetId, size: WidgetSize) => {
-    saveSizes({ ...widgetSizes, [id]: size });
-  };
-
-  const getSize = (id: WidgetId): WidgetSize => widgetSizes[id] || "sm";
-
-  // Drag & Drop
-  const handleDragStart = (idx: number) => setDragIdx(idx);
-  const handleDragOver = (e: React.DragEvent, idx: number) => { e.preventDefault(); setDragOverIdx(idx); };
   const handleDragEnd = () => {
-    if (dragIdx !== null && dragOverIdx !== null && dragIdx !== dragOverIdx) {
-      const next = [...activeWidgets];
-      const [moved] = next.splice(dragIdx, 1);
-      next.splice(dragOverIdx, 0, moved);
-      saveWidgets(next);
-    }
     setDragIdx(null);
     setDragOverIdx(null);
   };
 
-  const reservedCount = wishlistItems.filter(w => w.reservedBy).length;
-  const confirmedGuests = guests.filter(g => g.status === "confirmed").length;
-  const invitedTotal = guests.length;
-  const invitationProgress = Math.round((confirmedGuests / invitedTotal) * 100);
-
-  const renderWidget = (id: WidgetId, idx: number) => {
-    const size = getSize(id);
-    const colSpan = sizeColSpan[size];
-
-    const wrapper = (children: React.ReactNode) => (
-      <div
-        key={id}
-        draggable={editMode}
-        onDragStart={() => handleDragStart(idx)}
-        onDragOver={e => handleDragOver(e, idx)}
-        onDragEnd={handleDragEnd}
-        className={cn(
-          "relative group transition-all duration-300 animate-fade-in",
-          colSpan,
-          editMode && "cursor-grab active:cursor-grabbing",
-          dragOverIdx === idx && dragIdx !== idx && "ring-2 ring-accent ring-offset-2 rounded-2xl",
-          dragIdx === idx && "opacity-50"
-        )}
-      >
-        {editMode && (
-          <div className="absolute -top-2 -right-2 z-10 flex gap-1">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="w-6 h-6 rounded-full bg-card border border-border/50 shadow-sm flex items-center justify-center text-xs hover:bg-secondary">
-                  <Maximize2 className="h-3 w-3" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {(Object.keys(sizeLabels) as WidgetSize[]).map(s => (
-                  <DropdownMenuItem key={s} onClick={() => changeSize(id, s)} className={cn(size === s && "bg-accent/10 font-medium")}>
-                    {sizeLabels[s]}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <button onClick={() => removeWidget(id)} className="w-6 h-6 rounded-full bg-destructive/10 border border-destructive/20 shadow-sm flex items-center justify-center hover:bg-destructive/20">
-              <X className="h-3 w-3 text-destructive" />
-            </button>
-          </div>
-        )}
-        {editMode && <div className="absolute top-2 left-2 z-10"><GripVertical className="h-4 w-4 text-muted-foreground/40" /></div>}
-        {children}
-      </div>
-    );
-
-    switch (id) {
-      case "stats":
-        if (size === "xs") return wrapper(
-          <div className="p-4 rounded-2xl bg-card border border-border/50 shadow-elegant flex items-center gap-4">
-            <Users className="h-5 w-5 text-champagne" />
-            <div><p className="text-2xl font-serif font-bold">{s.totalGuests}</p><p className="text-xs text-muted-foreground">Gäste · {s.confirmed} zugesagt</p></div>
-          </div>
-        );
-        if (size === "sm") return wrapper(
-          <div className="grid grid-cols-2 gap-3">
-            {statCards.slice(0, 2).map(c => (
-              <div key={c.label} className="p-4 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-2">
-                <div className={`w-8 h-8 rounded-xl ${c.color} flex items-center justify-center`}><c.icon className="h-4 w-4" /></div>
-                <p className="text-2xl font-serif font-bold">{c.value}</p>
-                <p className="text-xs text-muted-foreground">{c.label}</p>
-              </div>
-            ))}
-          </div>
-        );
-        return wrapper(
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {statCards.map(c => (
-              <div key={c.label} className="p-5 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-3 hover:shadow-elevated transition-shadow">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">{c.label}</span>
-                  <div className={`w-9 h-9 rounded-xl ${c.color} flex items-center justify-center`}><c.icon className="h-4 w-4" /></div>
-                </div>
-                <p className="text-3xl font-serif font-bold">{c.value}</p>
-              </div>
-            ))}
-          </div>
-        );
-
-      case "rsvp":
-        if (size === "xs") return wrapper(
-          <div className="p-4 rounded-2xl bg-card border border-border/50 shadow-elegant">
-            <p className="text-xs text-muted-foreground">RSVP</p>
-            <p className="text-2xl font-serif font-bold text-sage">{s.confirmed}/{s.totalGuests}</p>
-          </div>
-        );
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-5 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-serif font-semibold">RSVP-Übersicht</h2>
-              <Button variant="outline" size="sm" asChild><Link to="/rsvp">Formular verwalten</Link></Button>
-            </div>
-            <div className="space-y-4">
-              {[{ label: "Zugesagt", val: s.confirmed, cls: "bg-sage" }, { label: "Ausstehend", val: s.pending, cls: "bg-champagne" }, { label: "Abgesagt", val: s.declined, cls: "bg-rose" }].map(r => (
-                <div key={r.label} className="space-y-2">
-                  <div className="flex justify-between text-sm"><span>{r.label}</span><span className="font-medium">{r.val}</span></div>
-                  <Progress value={(r.val / s.totalGuests) * 100} className={`h-2 bg-secondary [&>div]:${r.cls}`} />
-                </div>
-              ))}
-            </div>
-            {(size === "lg" || size === "xl") && (
-              <div className="grid grid-cols-3 gap-4 pt-2">
-                {[{ label: "Plus-Ones", value: s.plusOnes, icon: Users }, { label: "Kinder", value: s.children, icon: Baby }, { label: "Diätwünsche", value: s.dietarySpecial, icon: UtensilsCrossed }].map(m => (
-                  <div key={m.label} className="text-center p-3 rounded-xl bg-secondary/50 space-y-1">
-                    <m.icon className="h-4 w-4 mx-auto text-muted-foreground" />
-                    <p className="text-lg font-semibold">{m.value}</p>
-                    <p className="text-xs text-muted-foreground">{m.label}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-
-      case "activity":
-        const actCount = size === "xs" ? 2 : size === "sm" ? 3 : 5;
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-5 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center gap-2">
-              <Bell className="h-4 w-4 text-champagne" />
-              <h2 className="text-lg font-serif font-semibold">Letzte Aktivitäten</h2>
-            </div>
-            <div className="space-y-4">
-              {recentActivity.slice(0, actCount).map((a, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="w-2 h-2 mt-2 rounded-full bg-champagne shrink-0" />
-                  <div><p className="text-sm">{a.text}</p><p className="text-xs text-muted-foreground">{a.time}</p></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-
-      case "tasks":
-        if (size === "xs") return wrapper(
-          <div className="p-4 rounded-2xl bg-card border border-border/50 shadow-elegant">
-            <div className="flex items-center gap-2"><ListTodo className="h-4 w-4 text-champagne" /><span className="text-xs text-muted-foreground">Aufgaben</span></div>
-            <p className="text-2xl font-serif font-bold mt-1">{s.openTasks} <span className="text-sm font-normal text-muted-foreground">offen</span></p>
-          </div>
-        );
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-5 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2"><ListTodo className="h-4 w-4 text-champagne" /><h2 className="text-lg font-serif font-semibold">Offene Aufgaben</h2></div>
-              <Badge variant="secondary">{s.openTasks} offen</Badge>
-            </div>
-            <div className="space-y-3">
-              {tasks.filter(t => t.status !== "done").slice(0, size === "sm" ? 2 : 4).map(t => (
-                <div key={t.id} className="flex items-center justify-between p-3 rounded-xl bg-secondary/30 hover:bg-secondary/60 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full border-2 border-champagne/40" />
-                    <div>
-                      <p className="text-sm font-medium">{t.title}</p>
-                      <p className="text-xs text-muted-foreground">Fällig: {new Date(t.due).toLocaleDateString("de-DE")}</p>
-                    </div>
-                  </div>
-                  <Badge variant="outline" className="text-xs">{t.category}</Badge>
-                </div>
-              ))}
-            </div>
-            <Button variant="ghost" size="sm" asChild className="w-full"><Link to="/tasks">Alle Aufgaben →</Link></Button>
-          </div>
-        );
-
-      case "budget":
-        if (size === "xs") return wrapper(
-          <div className="p-4 rounded-2xl bg-card border border-border/50 shadow-elegant">
-            <div className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-champagne" /><span className="text-xs text-muted-foreground">Budget</span></div>
-            <p className="text-2xl font-serif font-bold mt-1">€{s.budget.spent.toLocaleString("de-DE")}</p>
-            <Progress value={(s.budget.spent / s.budget.total) * 100} className="h-1.5 bg-secondary [&>div]:bg-champagne mt-2" />
-          </div>
-        );
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-5 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-champagne" /><h2 className="text-lg font-serif font-semibold">Budget</h2></div>
-            <div className="space-y-3">
-              <div className="flex justify-between"><span className="text-sm text-muted-foreground">Ausgegeben</span><span className="font-semibold">€{s.budget.spent.toLocaleString("de-DE")}</span></div>
-              <Progress value={(s.budget.spent / s.budget.total) * 100} className="h-3 bg-secondary [&>div]:bg-champagne" />
-              <div className="flex justify-between text-sm text-muted-foreground"><span>€{s.budget.spent.toLocaleString("de-DE")}</span><span>€{s.budget.total.toLocaleString("de-DE")}</span></div>
-            </div>
-            <Button variant="ghost" size="sm" asChild className="w-full"><Link to="/budget">Details →</Link></Button>
-          </div>
-        );
-
-      case "quickstats":
-        return wrapper(
-          <div className={cn("grid gap-4", size === "xs" ? "grid-cols-1" : "grid-cols-2")}>
-            <div className="p-5 rounded-2xl bg-card border border-border/50 shadow-elegant text-center space-y-2 hover:shadow-elevated transition-shadow">
-              <Hotel className="h-5 w-5 mx-auto text-champagne" />
-              <p className="text-2xl font-serif font-bold">{s.accommodationNeeded}</p>
-              <p className="text-xs text-muted-foreground">Unterkunft nötig</p>
-            </div>
-            {size !== "xs" && (
-              <div className="p-5 rounded-2xl bg-card border border-border/50 shadow-elegant text-center space-y-2 hover:shadow-elevated transition-shadow">
-                <Bus className="h-5 w-5 mx-auto text-champagne" />
-                <p className="text-2xl font-serif font-bold">{s.shuttleNeeded}</p>
-                <p className="text-xs text-muted-foreground">Shuttle benötigt</p>
-              </div>
-            )}
-          </div>
-        );
-
-      case "quickactions":
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-champagne-light to-secondary border border-champagne/10 shadow-elegant space-y-3 hover:shadow-elevated transition-shadow">
-            <Sparkles className="h-5 w-5 text-champagne" />
-            <h3 className="font-serif font-semibold">Schnellaktionen</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" size="sm" className="text-xs justify-start" asChild><Link to="/guests">Gäste verwalten</Link></Button>
-              <Button variant="outline" size="sm" className="text-xs justify-start" asChild><Link to="/rsvp">RSVP verwalten</Link></Button>
-              {(size !== "xs") && <><Button variant="outline" size="sm" className="text-xs justify-start" asChild><Link to="/guest-portal">Gästeportal</Link></Button>
-              <Button variant="outline" size="sm" className="text-xs justify-start" asChild><Link to="/settings">Einstellungen</Link></Button></>}
-            </div>
-          </div>
-        );
-
-      case "guestbook":
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-champagne" /><h2 className="text-lg font-serif font-semibold">Gästebuch</h2></div>
-              <Badge variant="secondary">{guestbookEntries.length}</Badge>
-            </div>
-            <div className="space-y-3">
-              {guestbookEntries.slice(0, size === "xs" ? 1 : size === "sm" ? 2 : 3).map(e => (
-                <div key={e.id} className="p-3 rounded-xl bg-secondary/30 space-y-1">
-                  <div className="flex items-center gap-2"><span>{e.emoji}</span><span className="text-sm font-medium">{e.name}</span></div>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{e.message}</p>
-                </div>
-              ))}
-            </div>
-            <Button variant="ghost" size="sm" asChild className="w-full"><Link to="/guestbook">Alle Einträge →</Link></Button>
-          </div>
-        );
-
-      case "photos":
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2"><Camera className="h-4 w-4 text-champagne" /><h2 className="text-lg font-serif font-semibold">Fotos</h2></div>
-              <Badge variant="secondary">{galleryPhotos.length} Fotos</Badge>
-            </div>
-            {size !== "xs" && (
-              <div className="grid grid-cols-3 gap-2">
-                {galleryPhotos.slice(0, 6).map(p => (
-                  <div key={p.id} className="aspect-square rounded-xl bg-secondary overflow-hidden">
-                    <img src={p.url} alt={p.caption} className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
-            )}
-            <Button variant="ghost" size="sm" asChild className="w-full"><Link to="/photos">Galerie öffnen →</Link></Button>
-          </div>
-        );
-
-      case "music":
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2"><Music className="h-4 w-4 text-champagne" /><h2 className="text-lg font-serif font-semibold">Musik</h2></div>
-              <Badge variant="secondary">{playlistSongs.length} Songs</Badge>
-            </div>
-            <div className="space-y-2">
-              {[...playlistSongs].sort((a, b) => b.votes - a.votes).slice(0, size === "xs" ? 2 : 4).map((s, i) => (
-                <div key={s.id} className="flex items-center gap-3 p-2 rounded-lg bg-secondary/30">
-                  <span className="text-xs font-medium text-champagne w-6">#{i + 1}</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{s.title}</p>
-                    <p className="text-xs text-muted-foreground truncate">{s.artist}</p>
-                  </div>
-                  <span className="text-xs text-muted-foreground">👍 {s.votes}</span>
-                </div>
-              ))}
-            </div>
-            <Button variant="ghost" size="sm" asChild className="w-full"><Link to="/music">Playlist verwalten →</Link></Button>
-          </div>
-        );
-
-      case "wishlist":
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2"><Gift className="h-4 w-4 text-champagne" /><h2 className="text-lg font-serif font-semibold">Wunschliste</h2></div>
-              <Badge variant="secondary">{reservedCount}/{wishlistItems.length}</Badge>
-            </div>
-            <Progress value={(reservedCount / wishlistItems.length) * 100} className="h-2 bg-secondary [&>div]:bg-sage" />
-            {size !== "xs" && (
-              <div className="space-y-2">
-                {wishlistItems.filter(w => w.reservedBy).slice(0, 3).map(w => (
-                  <div key={w.id} className="flex items-center gap-2 text-sm">
-                    <span>{w.image}</span><span className="truncate">{w.title}</span>
-                    <span className="text-xs text-muted-foreground ml-auto">von {w.reservedBy}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <Button variant="ghost" size="sm" asChild className="w-full"><Link to="/wishlist">Alle Wünsche →</Link></Button>
-          </div>
-        );
-
-      case "invitations":
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-4 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2"><Send className="h-4 w-4 text-champagne" /><h2 className="text-lg font-serif font-semibold">Einladungen</h2></div>
-            </div>
-            {size === "xs" ? (
-              <p className="text-2xl font-serif font-bold">{invitationProgress}%</p>
-            ) : (
-              <div className="space-y-3">
-                <Progress value={invitationProgress} className="h-2 bg-secondary [&>div]:bg-champagne" />
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="p-2 rounded-lg bg-sage-light"><p className="text-lg font-bold text-sage">{confirmedGuests}</p><p className="text-[10px] text-muted-foreground">Zugesagt</p></div>
-                  <div className="p-2 rounded-lg bg-champagne-light"><p className="text-lg font-bold text-champagne">{guests.filter(g => g.status === "pending").length}</p><p className="text-[10px] text-muted-foreground">Offen</p></div>
-                  <div className="p-2 rounded-lg bg-rose-light"><p className="text-lg font-bold text-rose">{guests.filter(g => g.status === "declined").length}</p><p className="text-[10px] text-muted-foreground">Abgesagt</p></div>
-                </div>
-              </div>
-            )}
-            <Button variant="ghost" size="sm" asChild className="w-full"><Link to="/invitations">Einladungen →</Link></Button>
-          </div>
-        );
-
-      case "honeymoon":
-        if (size === "xs") return wrapper(
-          <div className="p-4 rounded-2xl bg-card border border-border/50 shadow-elegant">
-            <div className="flex items-center gap-2"><Globe className="h-4 w-4 text-champagne" /><span className="text-xs text-muted-foreground">Flitterwochen</span></div>
-            <p className="text-lg font-serif font-bold mt-1">🌴 {honeymoonVotes[0].destination}</p>
-            <p className="text-xs text-muted-foreground">{totalHoneymoonVotes} Stimmen gesamt</p>
-          </div>
-        );
-        return wrapper(
-          <div className="p-6 rounded-2xl bg-card border border-border/50 shadow-elegant space-y-5 hover:shadow-elevated transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2"><Globe className="h-4 w-4 text-champagne" /><h2 className="text-lg font-serif font-semibold">Flitterwochen-Voting</h2></div>
-              <Badge variant="secondary">{totalHoneymoonVotes} Stimmen</Badge>
-            </div>
-            {(size === "lg" || size === "xl") && (
-              <div className="relative w-full aspect-square max-w-[200px] mx-auto">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-100 via-blue-50 to-emerald-50 border-2 border-blue-200/50 shadow-lg overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center"><div className="w-[90%] h-px bg-blue-200/40" /></div>
-                  <div className="absolute inset-0 flex items-center justify-center"><div className="h-[90%] w-px bg-blue-200/40" /></div>
-                  <div className="absolute inset-0 flex items-center justify-center"><div className="w-[75%] h-[75%] rounded-full border border-blue-200/30" /></div>
-                  {honeymoonVotes.map((v, i) => {
-                    const angle = (i / honeymoonVotes.length) * Math.PI * 2 - Math.PI / 2;
-                    const radius = 30 + (i % 3) * 12;
-                    const x = 50 + Math.cos(angle) * radius;
-                    const y = 50 + Math.sin(angle) * radius;
-                    return (
-                      <div key={v.country} className="absolute group cursor-pointer" style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%, -50%)" }} title={`${v.destination}: ${v.votes}`}>
-                        <span className="text-lg">{v.emoji}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-            <div className="space-y-2">
-              {honeymoonVotes.slice(0, size === "sm" ? 3 : 5).map((v, i) => (
-                <div key={v.country} className="flex items-center gap-3 p-2 rounded-lg bg-secondary/30">
-                  <span className="text-sm font-bold text-champagne w-5">#{i + 1}</span>
-                  <span>{v.emoji}</span>
-                  <span className="text-sm flex-1">{v.destination}</span>
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-1.5 rounded-full bg-champagne" style={{ width: `${(v.votes / honeymoonVotes[0].votes) * 60}px` }} />
-                    <span className="text-xs text-muted-foreground">{v.votes}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-
-      default:
-        return null;
-    }
+  const getGridClass = (widgetId: string) => {
+    if (viewMode === "list") return "col-span-full";
+    const def = allWidgets.find(w => w.id === widgetId);
+    if (!def) return "col-span-full";
+    if (def.colSpan === 4) return "col-span-full";
+    if (def.colSpan === 2) return "col-span-full lg:col-span-2";
+    return "col-span-full sm:col-span-2 lg:col-span-1";
   };
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="space-y-4">
+        {/* Budget Banners */}
+        {showRedBanner && (
+          <div className="flex items-center gap-3 p-4 rounded-2xl border border-destructive/30 bg-destructive/5">
+            <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-destructive">Budget überschritten!</p>
+              <p className="text-xs text-muted-foreground">Ihr habt das geplante Budget um {pctUsed - 100}% überschritten.</p>
+            </div>
+          </div>
+        )}
+        {showYellowBanner && (
+          <div className="flex items-center gap-3 p-4 rounded-2xl border border-accent/30 bg-accent/5">
+            <AlertTriangle className="h-5 w-5 text-accent shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-accent">Budget-Warnung</p>
+              <p className="text-xs text-muted-foreground">{pctUsed}% des Budgets sind bereits verplant.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Demo Banner + Edit Controls */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <p className="text-sm text-muted-foreground">Willkommen zurück</p>
-            <h1 className="text-3xl md:text-4xl font-serif font-semibold">{weddingInfo.coupleName}</h1>
+            <p className="text-xs text-muted-foreground bg-secondary/50 px-3 py-1.5 rounded-full inline-block">
+              🎯 Demo-Modus – Interaktive Vorschau des Dashboards
+            </p>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant={editMode ? "default" : "outline"} size="sm" onClick={() => setEditMode(!editMode)} className="gap-2">
-              <GripVertical className="h-4 w-4" />
-              {editMode ? "Fertig" : "Anordnen"}
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowWidgetPanel(true)} className="gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* View mode toggle */}
+            <div className="flex rounded-lg overflow-hidden border border-border/50">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`p-2 transition-colors ${viewMode === "grid" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-secondary"}`}
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className={`p-2 transition-colors ${viewMode === "list" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:bg-secondary"}`}
+              >
+                <List className="h-4 w-4" />
+              </button>
+            </div>
+
+            {editMode && (
+              <>
+                <Button size="sm" variant="outline" onClick={() => setShowAddDialog(true)}>
+                  <Plus className="h-4 w-4" /> Widget
+                </Button>
+                <Button size="sm" variant="ghost" onClick={resetWidgets}>
+                  <RotateCcw className="h-4 w-4" /> Reset
+                </Button>
+              </>
+            )}
+            <Button
+              size="sm"
+              variant={editMode ? "default" : "outline"}
+              onClick={() => setEditMode(!editMode)}
+            >
               <Settings2 className="h-4 w-4" />
-              Widgets
+              {editMode ? "Fertig" : "Anpassen"}
             </Button>
-            <div className="text-right">
-              <p className="text-sm text-muted-foreground">Countdown</p>
-              <p className="text-2xl font-serif font-bold text-gradient-gold">{daysLeft} Tage</p>
-            </div>
-            <div className="w-14 h-14 rounded-2xl bg-champagne-light flex items-center justify-center">
-              <CalendarDays className="h-6 w-6 text-champagne" />
-            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {activeWidgets.map((id, idx) => renderWidget(id, idx))}
-        </div>
-      </div>
+        {/* Widgets Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {activeWidgets.map((widgetId, idx) => {
+            const Renderer = widgetRenderers[widgetId];
+            const def = allWidgets.find(w => w.id === widgetId);
+            if (!Renderer || !def) return null;
 
-      <Sheet open={showWidgetPanel} onOpenChange={setShowWidgetPanel}>
-        <SheetContent className="overflow-y-auto">
-          <SheetHeader><SheetTitle className="font-serif">Dashboard anpassen</SheetTitle></SheetHeader>
-          <div className="mt-6 space-y-6">
-            <Button variant="ghost" size="sm" onClick={resetWidgets} className="gap-2">
-              <RotateCcw className="h-3.5 w-3.5" /> Standard wiederherstellen
-            </Button>
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Widgets ein/ausblenden</p>
-              {allWidgets.map(w => (
-                <div key={w.id} className="flex items-center justify-between p-3 rounded-xl bg-secondary/30 hover:bg-secondary/50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <w.icon className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">{w.label}</span>
+            return (
+              <div
+                key={widgetId}
+                className={`${getGridClass(widgetId)} relative group transition-all duration-200 ${editMode ? "cursor-grab active:cursor-grabbing" : ""} ${dragOverIdx === idx && editMode ? "ring-2 ring-primary/50 rounded-2xl" : ""}`}
+                draggable={editMode}
+                onDragStart={() => handleDragStart(idx)}
+                onDragOver={(e) => handleDragOver(e, idx)}
+                onDrop={() => handleDrop(idx)}
+                onDragEnd={handleDragEnd}
+                style={{ animationDelay: `${idx * 60}ms` }}
+              >
+                {editMode && (
+                  <div className="absolute -top-2 -right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => removeWidget(widgetId)} className="p-1.5 rounded-full bg-destructive/10 hover:bg-destructive/20 text-destructive text-xs border border-destructive/20">
+                      <X className="h-3 w-3" />
+                    </button>
                   </div>
-                  <Switch checked={activeWidgets.includes(w.id)} onCheckedChange={() => toggleWidget(w.id)} />
+                )}
+                <div className={`h-full ${editMode ? "ring-1 ring-border/50 ring-dashed rounded-2xl" : ""}`}>
+                  <Renderer />
                 </div>
-              ))}
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Add Widget Dialog */}
+        <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Widget hinzufügen</DialogTitle>
+            </DialogHeader>
+            {availableToAdd.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-4 text-center">Alle Widgets sind bereits aktiv.</p>
+            ) : (
+              <div className="space-y-1 max-h-80 overflow-y-auto">
+                {availableToAdd.map(w => (
+                  <button
+                    key={w.id}
+                    onClick={() => addWidget(w.id)}
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-secondary transition-colors text-left group"
+                  >
+                    <w.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{w.title}</p>
+                      <p className="text-xs text-muted-foreground">{w.category}</p>
+                    </div>
+                    <Plus className="h-4 w-4 ml-auto text-muted-foreground group-hover:text-primary transition-colors" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
     </DashboardLayout>
   );
 };
 
-export default Dashboard;
+export default DashboardOverview;
